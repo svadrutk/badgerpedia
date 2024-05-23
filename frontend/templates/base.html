@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Home{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+
+</head>
+<body>
+    <div class="navbar">badgerpedia.</div>
+    <div class="grid">
+        <div class="subgrid">
+            <div class="search">
+                <div class="searchBlock"><i data-feather="search" class="search-icon"></i></div>
+                <div class="searchBlock"><input type="text" class="searchbar" hx-post="/search" hx-trigger="keyup delay:100ms" hx-target="#search_results" placeholder="Search for a class code..." name="q" autocomplete="off"></div>
+            </div>
+            <p><b>Credits</b></p>
+            <div class="multi-select" id="multi-select-credits">
+                <div class="select-box" onclick="toggleOptions('multi-select-credits')">
+                    <div class="selected-options" id="selected-credits"></div>
+                    <span class="placeholder">Select Credits</span>
+                </div>
+                <div class="options">
+                    <div class="option" data-value="1" onclick="toggleSelection(this, 'multi-select-credits', '1')">1 Credit</div>
+                    <div class="option" data-value="2" onclick="toggleSelection(this, 'multi-select-credits', '2')">2 Credits</div>
+                    <div class="option" data-value="3" onclick="toggleSelection(this, 'multi-select-credits', '3')">3 Credits</div>
+                    <div class="option" data-value="4" onclick="toggleSelection(this, 'multi-select-credits', '4')">4 Credits</div>
+                    <div class="option" data-value="5" onclick="toggleSelection(this, 'multi-select-credits', '5')">5 Credits</div>
+                    <div class="option" data-value="6" onclick="toggleSelection(this, 'multi-select-credits', '6')">6 Credits</div>
+                </div>
+            </div>
+            <p><b>Breadths</b></p>
+            <div class="multi-select" id="multi-select-breadths">
+                <div class="select-box" onclick="toggleOptions('multi-select-breadths')">
+                    <div class="selected-options" id="selected-breadths"></div>
+                    <span class="placeholder">Select Breadths</span>
+                </div>
+                <div class="options">
+                    <div class="option" data-value="BIO" onclick="toggleSelection(this, 'multi-select-breadths', 'BIO')">Biological Sciences</div>
+                    <div class="option" data-value="HUM" onclick="toggleSelection(this, 'multi-select-breadths', 'HUM')">Humanities</div>
+                    <div class="option" data-value="LIT" onclick="toggleSelection(this, 'multi-select-breadths', 'LIT')">Literature</div>
+                    <div class="option" data-value="PHY" onclick="toggleSelection(this, 'multi-select-breadths', 'PHY')">Physical Sciences</div>
+                    <div class="option" data-value="SOC" onclick="toggleSelection(this, 'multi-select-breadths', 'SOC')">Social Sciences</div>
+                </div>
+            </div>
+            <p><b>Requirements</b></p>
+            <div class="multi-select" id="multi-select-requirements">
+                <div class="select-box" onclick="toggleOptions('multi-select-requirements')">
+                    <div class="selected-options" id="selected-requirements"></div>
+                    <span class="placeholder">Select Requirements</span>
+                </div>
+                <div class="options">
+                    <div class="option" data-value="ETHNIC" onclick="toggleSelection(this, 'multi-select-requirements', 'ETHNIC')">Ethnic Studies</div>
+                    <div class="option" data-value="L&S" onclick="toggleSelection(this, 'multi-select-requirements', 'L&S')">L&S Requirement</div>
+                    <div class="option" data-value="HONORS" onclick="toggleSelection(this, 'multi-select-requirements', 'HONORS')">Honors</div>
+                    <div class="option" data-value="WORKPLACE" onclick="toggleSelection(this, 'multi-select-requirements', 'WORKPLACE')">Workplace Credit</div>
+                    <div class="option" data-value="FOREIGN" onclick="toggleSelection(this, 'multi-select-requirements', 'FOREIGN')">Foreign Language</div>
+                </div>
+            </div>
+            <p><b>General Education</b></p>
+            <div class="multi-select" id="multi-select-genEd">
+                <div class="select-box" onclick="toggleOptions('multi-select-genEd')">
+                    <div class="selected-options" id="selected-genEd"></div>
+                    <span class="placeholder">Select Designations</span>
+                </div>
+                <div class="options">
+                    <div class="option" data-value="COMM A" onclick="toggleSelection(this, 'multi-select-genEd', 'COMM A')">COMM A</div>
+                    <div class="option" data-value="COMM B" onclick="toggleSelection(this, 'multi-select-genEd', 'COMM B')">COMM B</div>
+                    <div class="option" data-value="QR-A" onclick="toggleSelection(this, 'multi-select-genEd', 'QR-A')">QR-A</div>
+                    <div class="option" data-value="QR-B" onclick="toggleSelection(this, 'multi-select-genEd', 'QR-B')">QR-B</div>
+                </div>
+            </div>
+            <p><b>Class Level</b></p>
+            <div class="multi-select" id="multi-select-classlevel">
+                <div class="select-box" onclick="toggleOptions('multi-select-classlevel')">
+                    <div class="selected-options" id="selected-classlevel"></div>
+                    <span class="placeholder">Select Class Level</span>
+                </div>
+                <div class="options">
+                    <div class="option" data-value="ELEM" onclick="toggleSelection(this, 'multi-select-classlevel', 'ELEM')">Elementary</div>
+                    <div class="option" data-value="INTER" onclick="toggleSelection(this, 'multi-select-classlevel', 'INTER')">Intermediate</div>
+                    <div class="option" data-value="ADV" onclick="toggleSelection(this, 'multi-select-classlevel', 'ADV')">Advanced</div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="subgrid">
+            <div class="results">
+                <form hx-post="/show_info" hx-target="#class_info" hx-trigger="submit" hx-swap="innerHTML">
+                    <div id="search_results"></div>
+                </form>
+            </div>
+        </div>
+        <div class="subgrid">
+            <div id="class_info"></div>
+        </div>
+    </div>
+</body>
+<script>
+feather.replace({ class: 'foo bar', 'stroke-width': 3, 'height': 15 });
+
+function toggleOptions(id) {
+    document.querySelector(`#${id} .options`).classList.toggle('active');
+}
+
+function toggleSelection(optionElement, id, value) {
+    optionElement.classList.toggle('selected');
+    let selectedOptionsContainer = document.getElementById(`selected-${id.split('-')[2]}`);
+    let selectedValues = Array.from(selectedOptionsContainer.children).map(child => child.getAttribute('data-value'));
+
+    if (selectedValues.includes(value)) {
+        let elementToRemove = selectedOptionsContainer.querySelector(`[data-value="${value}"]`);
+        selectedOptionsContainer.removeChild(elementToRemove);
+    } else {
+        let span = document.createElement('span');
+        span.classList.add('selected-option');
+        span.setAttribute('data-value', value);
+        span.textContent = value;
+        let deleteIcon = document.createElement('span');
+        deleteIcon.classList.add('delete-option');
+        deleteIcon.textContent = '✕';
+        deleteIcon.onclick = function() {
+            removeSelection(span, id, value);
+        };
+        span.appendChild(deleteIcon);
+        selectedOptionsContainer.appendChild(span);
+    }
+
+    updatePlaceholder(id);
+    sendSelectionsToServer(id);
+}
+
+function removeSelection(span, id, value) {
+    span.parentNode.removeChild(span);
+    let optionElement = document.querySelector(`#${id} .options .option[data-value="${value}"]`);
+    optionElement.classList.remove('selected');
+    updatePlaceholder(id);
+    sendSelectionsToServer(id);
+}
+
+function updatePlaceholder(id) {
+    let selectedOptionsContainer = document.querySelector(`#${id} .selected-options`);
+    let placeholder = document.querySelector(`#${id} .select-box .placeholder`);
+    if (selectedOptionsContainer.children.length > 0) {
+        placeholder.style.display = 'none';
+    } else {
+        placeholder.style.display = 'block';
+    }
+}
+
+function sendSelectionsToServer(id) {
+    let selectedOptionsContainer = document.querySelector(`#${id} .selected-options`);
+    let selectedValues = Array.from(selectedOptionsContainer.children).map(child => child.getAttribute('data-value'));
+
+    fetch(`/filter_${id.split('-')[2]}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ values: selectedValues })
+    })
+    .then(response => response.text())
+    .then(html => {
+        document.getElementById('search_results').innerHTML = html;
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+
+document.addEventListener('click', function(event) {
+    if (!event.target.closest('.multi-select')) {
+        document.querySelectorAll('.multi-select .options').forEach(function(element) {
+            element.classList.remove('active');
+        });
+    }
+});
+</script>
+</html>

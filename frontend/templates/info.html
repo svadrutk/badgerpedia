@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<div class="info">
+    <div class="classTitle">{{ data[0][1] }}</div>
+    <div class="className">{{ data[0][2] }}</div>
+    <div class="classAttributes">
+        <div class="classCredits"><i data-feather="check-circle" style="color: #00c889"></i>&nbsp;{{ data[0][4] }}
+            Credits</div>
+        <div class="repeatable"><i data-feather="repeat" style="color: #ff1b1b"></i>&nbsp;
+            {% if data[0][6] == "1" %}
+            Repeatable for Credit
+            {% elif data[0][6] == "2" %}
+            Repeatable 2x for Credit
+            {% elif data[0][6] == "3" %}
+            Repeatable 3x for Credit
+            {% elif data[0][6] == "4" %}
+            Repeatable 4x for Credit
+            {% elif data[0][6] == "5" %}
+            Repeatable 5x for Credit
+            {% elif data[0][6] == "6" %}
+            Repeatable 6x for Credit
+            {% else %}
+            Not Repeatable
+            {% endif %}
+        </div>
+        <div class="classLevel"><i data-feather="bar-chart" style="color: #15d3f4"></i>&nbsp;
+            {% if data[0][8] == 1 %}
+            Elementary
+            {% elif data[0][8] == 2 %}
+            Intermediate
+            {% elif data[0][8] == 3 %}
+            Advanced
+            {% elif data[0][8] == 0 %}
+            No Level
+            {% else %}
+            {{ data[0][8] }}
+            {% endif %}
+        </div>
+    </div>
+    <div class="classDescription">{{ data[0][3] }}</div>
+    <div class="classDescription"><b>Prerequisites</b></div>
+    <div class="classDescription">{{ data[0][5] }}</div>
+
+    <div class="gradeChart">
+        <canvas id="gradeChart"></canvas>
+    </div>
+</div>
+    <script>
+        var ctx = document.getElementById('gradeChart').getContext('2d');
+        Chart.register(ChartDataLabels);
+        var myChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['A', 'AB', 'B', 'BC', 'C', 'D', 'F'],
+                datasets: [{
+                    data: [{{ data[0][20] }}, {{ data[0][21] }}, {{ data[0][22] }}, {{ data[0][23] }}, {{ data[0][24] }}, {{ data[0][25] }}, {{ data[0][26]}}],
+                    backgroundColor: [
+                    "rgb(47,238,168)", "rgb(80,199,140)", "rgb(112,159,113)", "rgb(145,120,85)", "rgb(177,81,57)", "rgb(210,41,30)", "rgb(242,2,2)",
+                    ],
+                datalabels: {
+                    labels: {
+                        name: {
+                            align: 'center',
+                            font: {size: 16},
+                            borderColor: 'black',
+                            borderWidth: 2,
+                            borderRadius: 4,
+                            padding: 4
+                        }
+                    },
+                }
+            }],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    datalabels: {
+                        color: 'black',
+                        font: {
+                            weight: 'bold',
+                        },
+                        offset: 0,
+                        padding: 0,
+                        formatter: function(value, ctx) {
+                            var dataset = ctx.chart.data.datasets[ctx.datasetIndex];
+                            var total = dataset.data.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+                            var percentage = Math.round((value / total) * 100);
+                            if (percentage > 5) {
+                                return ctx.chart.data.labels[ctx.dataIndex];
+                            } else {
+                                return null; // Hides the label
+                            }
+                        },
+                    }
+                }
+            }
+        });
+        feather.replace({ class: 'foo bar', 'stroke-width': 3, 'height': 15 });
+    </script>
+</html>

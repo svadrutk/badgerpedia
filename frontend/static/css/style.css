@@ -1,0 +1,323 @@
+* {
+  font-family: system-ui, -apple-system;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.75rem;
+  font-weight: 600;
+  align-items: center;
+  padding: 10px 10px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #d0cfcf;
+}
+
+.grid {
+  display: grid;
+  font-family: "JetBrains Mono";
+  height: 100vh;
+  grid-template-columns: 0.5fr 0.5fr 1fr;
+}
+
+.subgrid {
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border: 1px solid #d0cfcf;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  width: 100%; /* adjust width as needed */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.search:focus-within {
+  border: 2px solid #0077cc;
+}
+
+.searchBlock {
+  display: flex;
+  align-items: center;
+  margin-left: 1%;
+  margin-right: 1%;
+}
+
+.searchbar {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 1rem;
+  padding: 5px;
+}
+
+
+#search_results {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.length {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  padding-bottom: 10px;
+  justify-content: center;
+  color: #656565;
+  border-bottom: 1px solid #d0cfcf;
+}
+
+html {
+  margin: 0;
+  padding: 0;
+}
+
+
+.results {
+  display: flex;
+  flex-direction: column;
+  overflow: scroll !important;
+  height: 100vh;
+  width: 100%;
+}
+
+.result {
+  padding: 10px;
+  display: grid;
+  width: 100%;
+  grid-template-columns: 0.8fr 0.2fr;
+}
+
+.result:hover .result-block-1, .result:hover .result-block-2 {
+  background-color: #f5f5f5 !important;
+  cursor: pointer;
+}
+
+.result:hover {
+  background-color: #f5f5f5 !important;
+  cursor: pointer;
+}
+
+.result-button:focus {
+  background-color: #f5f5f5 !important;
+}
+
+.result-block-1 {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.result-block-2 {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+}
+
+#block {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+#name, #credits {
+  font-size: 0.9rem;
+  color: #747474;
+}
+
+#grade {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+
+button {
+  padding: 0;
+  border: none;
+  background: none;
+  margin: 0;
+  width: 100%;
+}
+
+form {
+  margin: 0;
+  padding: 0;
+}
+
+
+.classTitle {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.className {
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: #8a8a8a;
+  margin-bottom: 10px;
+}
+
+.classDescription {
+  font-size: 1rem;
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+
+.info {
+  padding: 25px;
+}
+
+.classCredits, .repeatable, .classLevel {
+  align-items: center;
+  text-align: center;
+  display: flex;
+  color: #8a8a8a;
+  width: 100%;
+}
+
+.gradeChart {
+  width: 80%;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+#gradeChart {
+  width: 100%;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.classCredits {
+  justify-content: left;
+}
+
+.repeatable {
+  justify-content: center;
+}
+
+.classLevel {
+  justify-content: right;
+}
+
+i {
+  margin: 0;
+  padding: 0;
+}
+
+p {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.requirements {
+  height: 30vh;
+  overflow: scroll;
+  border: 1px solid #ccc;
+}
+
+.requirements input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.classAttributes {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  width: 100%;
+  align-items: center;
+  margin: 10px 0;
+}
+
+
+ /* Custom multi-select dropdown styling */
+ .multi-select {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.multi-select .select-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
+
+.multi-select .select-box::after {
+  content: '▼';
+  font-size: 12px;
+  color: #333;
+  pointer-events: none;
+}
+
+.multi-select .options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 150px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  z-index: 1000;
+  display: none;
+}
+
+.multi-select .options.active {
+  display: block;
+}
+
+.multi-select .option {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.multi-select .option:hover {
+  background-color: #f1f1f1;
+}
+
+.multi-select .option.selected {
+  background-color: #e2e2e2;
+}
+
+.multi-select .selected-options {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.multi-select .selected-options .selected-option {
+  display: flex;
+  align-items: center;
+  margin: 2px;
+  padding: 2px 8px;
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+.multi-select .selected-options .selected-option .delete-option {
+  margin-left: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}

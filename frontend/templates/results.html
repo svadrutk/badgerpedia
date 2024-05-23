@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+    <div class="length">{{length|safe}} Results</div>
+    {% for item in data %}
+    <button class="result-button" name="class-button" value="{{ item[1] }}">
+        <div class="result">
+            <div class="result-block-1">
+                <div class="result-subblock" id="block">{{item[1]}}</div>
+                <div class="result-subblock" id="name">{{item[2]}}</div>
+            </div>
+            <div class="result-block-2">
+                {% if item[27] == 'A' or item[27] == 'AB' %}
+                <div class="result-subblock" id="grade" style="color:#04dd78">{{item[27]}}</div>
+                {% elif item[27] == 'B' or item[27] == 'BC' %}
+                <div class="result-subblock" id="grade" style="color:#cfcb4e">{{item[27]}}</div>
+                {% elif item[27] == 'C' %}
+                <div class="result-subblock" id="grade" style="color:#ff930f">{{item[27]}}</div>
+                {% else %}
+                <div class="result-subblock" id="grade" style="color:#ff3333">{{item[27]}}</div>
+                {% endif %}
+            </div>
+        </div>
+    </button>
+    {% endfor %}
+</html>
