@@ -108,4 +108,28 @@ def convert_to_letters():
     conn.close()
 
 
-convert_to_letters()
+def transfer_credits_to_range():
+    conn = sqlite3.connect('classes.db')
+    crsr = conn.cursor()
+
+    # Add min_credits and max_credits columns
+    crsr.execute('ALTER TABLE Course ADD COLUMN min_credits INTEGER')
+    crsr.execute('ALTER TABLE Course ADD COLUMN max_credits INTEGER')
+
+    # Update min_credits and max_credits based on credits column
+    crsr.execute('SELECT rowid, credits FROM Course')
+    rows = crsr.fetchall()
+    for row in rows:
+        rowid, credits = row
+        if '-' in credits:
+            min_credits, max_credits = map(int, credits.split('-'))
+        else:
+            min_credits = max_credits = int(credits)
+        print(f'Updating min_credits and max_credits for rowid {rowid} to {min_credits} and {max_credits}')
+        crsr.execute('UPDATE Course SET min_credits = ?, max_credits = ? WHERE rowid = ?', (min_credits, max_credits, rowid))
+
+    conn.commit()
+    conn.close()
+
+# Call the function
+transfer_credits_to_range()

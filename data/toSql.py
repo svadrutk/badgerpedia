@@ -14,6 +14,7 @@ def to_sql(df):
         conn.close()
     return None
 
+
 def main():
     try:
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
