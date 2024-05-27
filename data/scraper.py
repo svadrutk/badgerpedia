@@ -1,10 +1,9 @@
-from requests_html import HTMLSession
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import numpy as np
 import re
-import data.cleanup as cleanup
+import cleanup
 
 COURSES_URL = "https://guide.wisc.edu/courses/"
 df = pd.DataFrame()

@@ -1,10 +1,12 @@
-import sqlite3
 import pandas as pd
 import os
+import psycopg2
+
+DATABASE_URL = os.environ['DATABASE_URL']
 
 def to_sql(df):
     try:
-        conn = sqlite3.connect('classes.db')
+        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
         df.insert(0, 'id', range(1, 1 + len(df)))  # Add an id column to the DataFrame
         df.columns = ['id', 'block', 'name', 'desc', 'credits', 'requisites', 'repeatable', 'lastTaught', 'level', 'breadth', 'grad', 'lns', 'ethnic', 'honors', 'genEd', 'workplace', 'foreignLang']
         df.to_sql('Course', conn, if_exists='replace')

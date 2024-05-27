@@ -1,9 +1,12 @@
 import requests
 import sqlite3
+import psycopg2
+import os
 
 # Constants
 API_TOKEN = '192214970a684cd68488a22e5fa80a34'
 BASE_URL = 'https://api.madgrades.com/v1'
+DATABASE_URL = os.environ['DATABASE_URL']
 
 # Headers for authentication
 headers = {
@@ -42,7 +45,7 @@ def pull_grade_distribution(course_query):
 
 
 def add_grades_to_table():
-    conn = sqlite3.connect('classes.db')
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cursor = conn.cursor()
     cursor.execute("DELETE FROM gradeDists")
     # Fetch all classes from the Course table
@@ -71,7 +74,7 @@ def add_grades_to_table():
     conn.close()
 
 def convert_to_letters():
-    conn = sqlite3.connect('classes.db')
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM gradeDists")
     rows = cursor.fetchall()
@@ -109,7 +112,7 @@ def convert_to_letters():
 
 
 def transfer_credits_to_range():
-    conn = sqlite3.connect('classes.db')
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     crsr = conn.cursor()
 
     # Add min_credits and max_credits columns
