@@ -1,21 +1,21 @@
 <!DOCTYPE html>
     <div class="length">{{length|safe}} Results</div>
     {% for item in data %}
-    <button class="result-button" name="class-button" value="{{ item[1] }}">
+    <button class="result-button" name="class-button" value="{{ item[0] }}">
         <div class="result">
             <div class="result-block-1">
-                <div class="result-subblock" id="block">{{item[1]}}</div>
-                <div class="result-subblock" id="name">{{item[2]}}</div>
+                <div class="result-subblock" id="block">{{item[0]}}</div>
+                <div class="result-subblock" id="name">{{item[1]}}</div>
             </div>
             <div class="result-block-2">
-                {% if item[28] == 'A' or item[28] == 'AB' %}
-                <div class="result-subblock" id="grade" style="color:#04dd78">{{item[28]}}</div>
-                {% elif item[28] == 'B' or item[28] == 'BC' %}
-                <div class="result-subblock" id="grade" style="color:#cfcb4e">{{item[28]}}</div>
-                {% elif item[28] == 'C' %}
-                <div class="result-subblock" id="grade" style="color:#ff930f">{{item[28]}}</div>
+                {% if item[26] == 'A ' or item[26] == 'AB ' %}
+                <div class="result-subblock" id="grade" style="color:#04dd78">{{item[26]}}</div>
+                {% elif item[26] == 'B ' or item[26] == 'BC ' %}
+                <div class="result-subblock" id="grade" style="color:#cfcb4e">{{item[26]}}</div>
+                {% elif item[26] == 'C ' %}
+                <div class="result-subblock" id="grade" style="color:#ff930f">{{item[26]}}</div>
                 {% else %}
-                <div class="result-subblock" id="grade" style="color:#ff3333">{{item[28]}}</div>
+                <div class="result-subblock" id="grade" style="color:#ff3333">{{item[26]}}</div>
                 {% endif %}
             </div>
         </div>

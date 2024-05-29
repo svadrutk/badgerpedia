@@ -41,6 +41,8 @@ def get_class_codes(name):
 
     url = "https://public.enroll.wisc.edu/api/search/v1"
     course_name = name
+    if '/' in course_name:
+      course_name = course_name.split('/')[1]
 
     def get_referrer():
       base = f"https://public.enroll.wisc.edu/search?term={term}&keywords="
@@ -56,7 +58,7 @@ def get_class_codes(name):
 
         index += 1
       print(base + end)
-      return (base + end)
+      return (base + end + "&closed=true")
 
 
     payload = json.dumps({

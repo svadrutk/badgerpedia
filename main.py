@@ -38,6 +38,7 @@ def search():
 @app.route('/show_info', methods=['POST'])
 def show_info():
     value = request.form['class-button']
+    print(value)
     f = dbSearch.getData(value)
     capacity = enrollment.get_capacity(enrollment.get_enrollment(enrollment.get_class_codes(value)))
 

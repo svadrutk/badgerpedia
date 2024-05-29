@@ -3,7 +3,7 @@ import numpy as np
 import psycopg2
 import os
 
-DATABASE_URL = os.environ['DATABASE_URL']
+DATABASE_URL = "postgres://ua3q28iheduhho:p26d195f5c17862a0a3ee2c34de767a1404a1097b235bcc236966ad8d42a11461@ce0lkuo944ch99.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/decb7djfbonbrm"
 
 def search_db(search_term, creds, requirements, breadths, genEds, class_level):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
@@ -33,11 +33,9 @@ def search_db(search_term, creds, requirements, breadths, genEds, class_level):
         normalized_search_term = " "
         search_term = " "
 
-
     # Mapping for abbreviations
     abbreviation_mapping = {
         'cs': 'COMP SCI',
-
         # Add more abbreviations as needed
     }
 
@@ -51,18 +49,18 @@ def search_db(search_term, creds, requirements, breadths, genEds, class_level):
     print("Normalized search term:", normalized_search_term)
 
     # Base query
-    query = '''
+    subquery = '''
     SELECT classes.*, grades.*,
     (CASE
-        WHEN LOWER(REPLACE(classes.block, " ", "")) LIKE ? THEN 10
+        WHEN LOWER(REPLACE(classes.block, ' ', '')) LIKE %s THEN 10
         ELSE 0
     END +
      CASE
-        WHEN LOWER(classes.description) LIKE ? THEN 5
+        WHEN LOWER(classes.description) LIKE %s THEN 5
         ELSE 0
     END +
      CASE
-        WHEN classes.block LIKE ? THEN 7
+        WHEN classes.block LIKE %s THEN 7
         ELSE 0
     END) AS relevance_score
     FROM classes
@@ -74,13 +72,14 @@ def search_db(search_term, creds, requirements, breadths, genEds, class_level):
 
     # Add credit filters
     if creds:
-        query += ' AND classes.min_credits <= ? AND classes.max_credits >= ?'
+        subquery += ' AND classes.min_credits <= %s AND classes.max_credits >= %s'
         print("Max creds:", max(creds), "Min creds:", min(creds))
         params.extend([max(creds), min(creds)])
 
     # Add class level filters
     if class_level:
-        query += ' AND classes.level IN ({})'.format(','.join('?' for _ in class_level))
+        placeholders = ', '.join(['%s'] * len(class_level))
+        subquery += f' AND classes.level IN ({placeholders})'
         print("Class level:", class_level)
         params.extend(class_level)
 
@@ -89,12 +88,13 @@ def search_db(search_term, creds, requirements, breadths, genEds, class_level):
     if requirements:
         for req in requirements:
             print("Requirement:", req)
-            query += f' AND classes.{requirementsDict[req]} = 1'
+            subquery += f' AND classes.{requirementsDict[req]} = TRUE'
 
     # Add breadth filters
     breadthDict = {'BIO': 'Biological Science', 'HUM': 'Humanities', 'PHY': 'Physical Science', 'SOC': 'Social Science', 'NAT': 'Natural Science', 'LIT': 'Literature'}
     if breadths:
-        query += ' AND (' + ' OR '.join([f'classes.breadth = ?' for _ in breadths]) + ')'
+        breadth_placeholders = ' OR '.join(['classes.breadth = %s' for _ in breadths])
+        subquery += f' AND ({breadth_placeholders})'
         print("Breadths:", breadths)
         params.extend([breadthDict[breadth] for breadth in breadths])
 
@@ -102,15 +102,20 @@ def search_db(search_term, creds, requirements, breadths, genEds, class_level):
     genEdDict = {'COMM A': 1, 'COMM B': 2, 'QR-A': 1, 'QR-B': 2}
     if genEds:
         print("GenEds:", genEds)
-        query += ' AND (' + ' OR '.join([f'classes.genEd = ?' for _ in genEds]) + ')'
+        genEd_placeholders = ' OR '.join(['classes.genEd = %s' for _ in genEds])
+        subquery += f' AND ({genEd_placeholders})'
         params.extend([genEdDict[genEd] for genEd in genEds])
 
-    # Ensure only classess with a relevance_score > 0 are included
-    query += ' AND relevance_score > 0'
-    # Order by relevance score
-    query += ' ORDER BY relevance_score description'
-    print(query)
-    crsr.execute(query, params)
+    # Ensure only classes with a relevance_score > 0 are included in the outer query
+    final_query = f'''
+    SELECT * FROM ({subquery}) subquery
+    WHERE relevance_score > 0
+    ORDER BY relevance_score DESC
+    '''
+
+    print(final_query)
+    print("Parameters:", params)
+    crsr.execute(final_query, params)
     rows = crsr.fetchall()
     conn.close()
 
@@ -127,9 +132,11 @@ def search_db(search_term, creds, requirements, breadths, genEds, class_level):
 
 
 
+
+
 def getData(name):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-    query = f'SELECT classes.*, grades.* FROM classes LEFT JOIN grades ON classes.block = grades.block WHERE classes.block = "{name}"'
+    query = f'SELECT classes.*, grades.* FROM classes LEFT JOIN grades ON classes.block = grades.block WHERE classes.block = \'{name}\''
     crsr = conn.cursor()
     crsr.execute(query)
     row = crsr.fetchall()

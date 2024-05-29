@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <div class="info">
-    <div class="classTitle">{{ data[0][1] }}</div>
-    <div class="className">{{ data[0][2] }}</div>
+    <div class="classTitle">{{ data[0][0] }}</div>
+    <div class="className">{{ data[0][1] }}</div>
     <div class="className" style="color: #8a8a8a; font-size: 1.1rem;">Average Grade:
         <span>
-            {% if data[0][28] == "A" %}
-            <span style="color: #04dd78; font-weight: 600;">{{ data[0][28] }}</span>
-            {% elif data[0][28] == "AB" %}
-            <span style="color: #04dd78; font-weight: 600;">{{ data[0][28] }}</span>
-            {% elif data[0][28] == "B" %}
-            <span style="color: #cfcb4e; font-weight: 600;">{{ data[0][28] }}</span>
-            {% elif data[0][28] == "BC" %}
-            <span style="color: #cfcb4e; font-weight: 600;">{{ data[0][28] }}</span>
-            {% elif data[0][28] == "C" %}
-            <span style="color: #ff930f; font-weight: 600;">{{ data[0][28] }}</span>
-            {% elif data[0][28] == "D" %}
-            <span style="color: #ff3333; font-weight: 600;">{{ data[0][28] }}</span>
-            {% elif data[0][28] == "F" %}
-            <span style="color: #ff3333; font-weight: 600;">{{ data[0][28] }}</span>
+            {% if data[0][26] == "A " %}
+            <span style="color: #04dd78; font-weight: 600;">{{ data[0][26] }}</span>
+            {% elif data[0][26] == "AB " %}
+            <span style="color: #04dd78; font-weight: 600;">{{ data[0][26] }}</span>
+            {% elif data[0][26] == "B " %}
+            <span style="color: #cfcb4e; font-weight: 600;">{{ data[0][26] }}</span>
+            {% elif data[0][26] == "BC " %}
+            <span style="color: #cfcb4e; font-weight: 600;">{{ data[0][26] }}</span>
+            {% elif data[0][26] == "C " %}
+            <span style="color: #ff930f; font-weight: 600;">{{ data[0][26] }}</span>
+            {% elif data[0][26] == "D " %}
+            <span style="color: #ff3333; font-weight: 600;">{{ data[0][26] }}</span>
+            {% elif data[0][26] == "F " %}
+            <span style="color: #ff3333; font-weight: 600;">{{ data[0][26] }}</span>
             {% else %}
-            {{ data[0][28] }}
+            {{ data[0][26] }}
             {% endif %}
         </span>
 
@@ -28,6 +28,7 @@
 
     </div>
     <div class="className" style="color: #8a8a8a; font-size: 1.1rem;">Enrolled:
+    {% if capacity[1] != 0 %}
     {% if capacity[0] == 0 and capacity[1] == 1 %}
     <span style="color: #ff1b1b">N/A</span>
     {% elif capacity[0]/capacity[1] > 0.9 %}
@@ -37,49 +38,52 @@
     {% else %}
     <span style="color: #04dd78">{{capacity[0]}}/{{capacity[1]}}</span>
     {% endif %}
+    {% else %}
+    <span style="color: #ff1b1b">N/A</span>
+    {% endif %}
     </div>
     <div class="classAttributes">
         <div class="classCredits"><i data-feather="check-circle" style="color: #00c889"></i>&nbsp;
-            {% if data[0][16] == data[0][17] %}
-            {{ data[0][16] }} Credits
+            {% if data[0][15] == data[0][16] %}
+            {{ data[0][15] }} Credits
             {% else %}
-            {{ data[0][16] }}-{{ data[0][17] }} Credits
+            {{ data[0][15] }}-{{ data[0][16] }} Credits
             {% endif %}
         </div>
         <div class="repeatable"><i data-feather="repeat" style="color: #ff1b1b"></i>&nbsp;
-            {% if data[0][6] == "1" %}
+            {% if data[0][5] == "1" %}
             Repeatable for Credit
-            {% elif data[0][6] == "2" %}
+            {% elif data[0][5] == "2" %}
             Repeatable 2x for Credit
-            {% elif data[0][6] == "3" %}
+            {% elif data[0][5] == "3" %}
             Repeatable 3x for Credit
-            {% elif data[0][6] == "4" %}
+            {% elif data[0][5] == "4" %}
             Repeatable 4x for Credit
-            {% elif data[0][6] == "5" %}
+            {% elif data[0][5] == "5" %}
             Repeatable 5x for Credit
-            {% elif data[0][6] == "6" %}
+            {% elif data[0][5] == "6" %}
             Repeatable 6x for Credit
             {% else %}
             Not Repeatable
             {% endif %}
         </div>
         <div class="classLevel"><i data-feather="bar-chart" style="color: #15d3f4"></i>&nbsp;
-            {% if data[0][7] == 1 %}
+            {% if data[0][6] == 1 %}
             Elementary
-            {% elif data[0][7] == 2 %}
+            {% elif data[0][6] == 2 %}
             Intermediate
-            {% elif data[0][7] == 3 %}
+            {% elif data[0][6] == 3 %}
             Advanced
-            {% elif data[0][7] == 0 %}
+            {% elif data[0][6] == 0 %}
             No Level
             {% else %}
-            {{ data[0][7] }}
+            {{ data[0][6] }}
             {% endif %}
         </div>
     </div>
-    <div class="classDescription">{{ data[0][3] }}</div>
+    <div class="classDescription">{{ data[0][2] }}</div>
     <div class="classDescription"><b>Prerequisites</b></div>
-    <div class="classDescription">{{ data[0][4] }}</div>
+    <div class="classDescription">{{ data[0][3] }}</div>
 
     <div class="gradeChart">
         <canvas id="gradeChart" style="display: none;"></canvas>
@@ -169,7 +173,7 @@
             data: {
                 labels: ['A', 'AB', 'B', 'BC', 'C', 'D', 'F'],
                 datasets: [{
-                    data: [{{ data[0][20] }}, {{ data[0][21] }}, {{ data[0][22] }}, {{ data[0][23] }}, {{ data[0][24] }}, {{ data[0][25] }}, {{ data[0][26]}}],
+                    data: [{{ data[0][19] }}, {{ data[0][20] }}, {{ data[0][21] }}, {{ data[0][22] }}, {{ data[0][23] }}, {{ data[0][24] }}, {{ data[0][25]}}],
                     backgroundColor: [
                     "rgb(47,238,168)", "rgb(80,199,140)", "rgb(112,159,113)", "rgb(145,120,85)", "rgb(177,81,57)", "rgb(210,41,30)", "rgb(242,2,2)",
                     ],
