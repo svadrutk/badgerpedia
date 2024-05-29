@@ -1,21 +1,39 @@
-CREATE TABLE Course (
-    id INT PRIMARY KEY,
-    block VARCHAR(255),
-    name VARCHAR(255),
-    desc TEXT,
-    credits VARCHAR(5),
+-- Create the 'classes' table
+CREATE TABLE classes (
+    block VARCHAR NOT NULL,
+    name VARCHAR,
+    description TEXT,
     requisites TEXT,
-    repeatable INT,
-    lastTaught TEXT,
-    level INT,
-    breadth TEXT,
-    grad INT,
-    lns INT,
-    ethnic INT,
-    honors INT,
-    genEd INT,
-    workplace INT,
-    foreignLang INT
+    repeatable TEXT,
+    lastTaught DATE,
+    level INTEGER,
+    breadth VARCHAR,
+    grad INTEGER,
+    lns INTEGER,
+    ethnic INTEGER,
+    honors INTEGER,
+    genEd INTEGER,
+    workplace INTEGER,
+    foreignLang INTEGER,
+    min_credits INTEGER,
+    max_credits INTEGER,
+    PRIMARY KEY (block)
 );
 
-CREATE INDEX idx_block ON Course (block);
+-- Create the 'grades' table
+CREATE TABLE grades (
+    block VARCHAR NOT NULL,
+    total INTEGER,
+    aCount INTEGER,
+    abCount INTEGER,
+    bCount INTEGER,
+    bcCount INTEGER,
+    cCount INTEGER,
+    dCount INTEGER,
+    fCount INTEGER,
+    letter CHAR(2),
+    FOREIGN KEY (block) REFERENCES classes (block)
+);
+
+-- Create an index on the 'block' column in the 'classes' table
+CREATE INDEX block_index ON classes (block);

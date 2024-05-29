@@ -1,9 +1,12 @@
 import pandas as pd
 import numpy as np
-import sqlite3
+import psycopg2
+import os
+
+DATABASE_URL = os.environ['DATABASE_URL']
 
 def search_db(search_term, creds, requirements, breadths, genEds, class_level):
-    conn = sqlite3.connect('data/classes.db')
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     crsr = conn.cursor()
 
     # Default values if no filters are provided
@@ -49,21 +52,21 @@ def search_db(search_term, creds, requirements, breadths, genEds, class_level):
 
     # Base query
     query = '''
-    SELECT Course.*, gradeDists.*,
+    SELECT classes.*, grades.*,
     (CASE
-        WHEN LOWER(REPLACE(Course.block, " ", "")) LIKE ? THEN 10
+        WHEN LOWER(REPLACE(classes.block, " ", "")) LIKE ? THEN 10
         ELSE 0
     END +
      CASE
-        WHEN LOWER(Course.desc) LIKE ? THEN 5
+        WHEN LOWER(classes.description) LIKE ? THEN 5
         ELSE 0
     END +
      CASE
-        WHEN Course.block LIKE ? THEN 7
+        WHEN classes.block LIKE ? THEN 7
         ELSE 0
     END) AS relevance_score
-    FROM Course
-    LEFT JOIN gradeDists ON Course.block = gradeDists.block
+    FROM classes
+    LEFT JOIN grades ON classes.block = grades.block
     WHERE 1=1
     '''
 
@@ -71,13 +74,13 @@ def search_db(search_term, creds, requirements, breadths, genEds, class_level):
 
     # Add credit filters
     if creds:
-        query += ' AND Course.min_credits <= ? AND Course.max_credits >= ?'
+        query += ' AND classes.min_credits <= ? AND classes.max_credits >= ?'
         print("Max creds:", max(creds), "Min creds:", min(creds))
         params.extend([max(creds), min(creds)])
 
     # Add class level filters
     if class_level:
-        query += ' AND Course.level IN ({})'.format(','.join('?' for _ in class_level))
+        query += ' AND classes.level IN ({})'.format(','.join('?' for _ in class_level))
         print("Class level:", class_level)
         params.extend(class_level)
 
@@ -86,12 +89,12 @@ def search_db(search_term, creds, requirements, breadths, genEds, class_level):
     if requirements:
         for req in requirements:
             print("Requirement:", req)
-            query += f' AND Course.{requirementsDict[req]} = 1'
+            query += f' AND classes.{requirementsDict[req]} = 1'
 
     # Add breadth filters
     breadthDict = {'BIO': 'Biological Science', 'HUM': 'Humanities', 'PHY': 'Physical Science', 'SOC': 'Social Science', 'NAT': 'Natural Science', 'LIT': 'Literature'}
     if breadths:
-        query += ' AND (' + ' OR '.join([f'Course.breadth = ?' for _ in breadths]) + ')'
+        query += ' AND (' + ' OR '.join([f'classes.breadth = ?' for _ in breadths]) + ')'
         print("Breadths:", breadths)
         params.extend([breadthDict[breadth] for breadth in breadths])
 
@@ -99,13 +102,13 @@ def search_db(search_term, creds, requirements, breadths, genEds, class_level):
     genEdDict = {'COMM A': 1, 'COMM B': 2, 'QR-A': 1, 'QR-B': 2}
     if genEds:
         print("GenEds:", genEds)
-        query += ' AND (' + ' OR '.join([f'Course.genEd = ?' for _ in genEds]) + ')'
+        query += ' AND (' + ' OR '.join([f'classes.genEd = ?' for _ in genEds]) + ')'
         params.extend([genEdDict[genEd] for genEd in genEds])
 
-    # Ensure only courses with a relevance_score > 0 are included
+    # Ensure only classess with a relevance_score > 0 are included
     query += ' AND relevance_score > 0'
     # Order by relevance score
-    query += ' ORDER BY relevance_score DESC'
+    query += ' ORDER BY relevance_score description'
     print(query)
     crsr.execute(query, params)
     rows = crsr.fetchall()
@@ -125,8 +128,8 @@ def search_db(search_term, creds, requirements, breadths, genEds, class_level):
 
 
 def getData(name):
-    conn = sqlite3.connect('data/classes.db')
-    query = f'SELECT Course.*, gradeDists.* FROM Course LEFT JOIN gradeDists ON Course.block = gradeDists.block WHERE Course.block = "{name}"'
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    query = f'SELECT classes.*, grades.* FROM classes LEFT JOIN grades ON classes.block = grades.block WHERE classes.block = "{name}"'
     crsr = conn.cursor()
     crsr.execute(query)
     row = crsr.fetchall()

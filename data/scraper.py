@@ -2,7 +2,6 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import numpy as np
-import re
 import cleanup
 
 COURSES_URL = "https://guide.wisc.edu/courses/"

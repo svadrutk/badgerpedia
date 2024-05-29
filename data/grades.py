@@ -1,5 +1,4 @@
 import requests
-import sqlite3
 import psycopg2
 import os
 
@@ -47,9 +46,9 @@ def pull_grade_distribution(course_query):
 def add_grades_to_table():
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM gradeDists")
+    cursor.execute("DELETE FROM grades")
     # Fetch all classes from the Course table
-    cursor.execute("SELECT block FROM Course")
+    cursor.execute("SELECT block FROM classes")
     classes = cursor.fetchall()
 
     # Iterate over each class
@@ -61,10 +60,10 @@ def add_grades_to_table():
 
         print('Inserting grade distribution for:', course_block)
         print(grade_distribution)
-        # Insert grade distribution data into the gradeDists table
+        # Insert grade distribution data into the grades table
         if grade_distribution:
             # Assuming grade_distribution is a dictionary
-            cursor.execute("INSERT INTO gradeDists (block, total, aCount, abCount, bCount, bcCount, cCount, dCount, fCount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            cursor.execute("INSERT INTO grades (block, total, aCount, abCount, bCount, bcCount, cCount, dCount, fCount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                         (course_block, grade_distribution['total'], grade_distribution['aCount'], grade_distribution['abCount'],
                             grade_distribution['bCount'], grade_distribution['bcCount'], grade_distribution['cCount'],
                             grade_distribution['dCount'], grade_distribution['fCount']))
@@ -76,7 +75,7 @@ def add_grades_to_table():
 def convert_to_letters():
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM gradeDists")
+    cursor.execute("SELECT * FROM grades")
     rows = cursor.fetchall()
     # calculate gpa
     for row in rows:
@@ -89,7 +88,7 @@ def convert_to_letters():
         d = row[8]
         f = row[9]
         if total == 0 or a + ab + b + bc + c + d + f == 0:
-            cursor.execute("UPDATE gradeDists SET letter = ? WHERE block = ?", ('N/A', row[1]))
+            cursor.execute("UPDATE grades SET letter = ? WHERE block = ?", ('N/A', row[1]))
             conn.commit()
             continue
         gpa = (4 * a + 3.5 * ab + 3 * b + 2.5 * bc + 2 * c + 1 * d) / (a + ab + b + bc + c + d + f)
@@ -106,7 +105,7 @@ def convert_to_letters():
         else:
             letter = 'F'
         print("GPA for", row[1], "is", gpa, "which is equivalent to", letter)
-        cursor.execute("UPDATE gradeDists SET letter = ? WHERE block = ?", (letter, row[1]))
+        cursor.execute("UPDATE grades SET letter = ? WHERE block = ?", (letter, row[1]))
         conn.commit()
     conn.close()
 
