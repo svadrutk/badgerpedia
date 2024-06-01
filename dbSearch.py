@@ -88,7 +88,7 @@ def search_db(search_term, creds, requirements, breadths, genEds, class_level):
     if requirements:
         for req in requirements:
             print("Requirement:", req)
-            subquery += f' AND classes.{requirementsDict[req]} = TRUE'
+            subquery += f' AND classes.{requirementsDict[req]} = 1'
 
     # Add breadth filters
     breadthDict = {'BIO': 'Biological Science', 'HUM': 'Humanities', 'PHY': 'Physical Science', 'SOC': 'Social Science', 'NAT': 'Natural Science', 'LIT': 'Literature'}
