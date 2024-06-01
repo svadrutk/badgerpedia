@@ -3,7 +3,7 @@ import numpy as np
 import psycopg2
 import os
 
-DATABASE_URL = "postgres://ua3q28iheduhho:p26d195f5c17862a0a3ee2c34de767a1404a1097b235bcc236966ad8d42a11461@ce0lkuo944ch99.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/decb7djfbonbrm"
+DATABASE_URL = "postgres://ua3q28iheduhho:pc4c0694f6230bd529aefd32cb4207cf681390d7ab8569ac548bfa5229b40b494@ce1r1ldap2qd4b.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/d1vv29b9mlqfo8"
 
 def search_db(search_term, creds, requirements, breadths, genEds, class_level):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
