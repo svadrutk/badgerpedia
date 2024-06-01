@@ -19,6 +19,7 @@ def index():
 
 @app.route('/search', methods=['POST'])
 def search():
+    global creds, requirements, departments, class_level, breadths, genEds
     query = request.form.get('q')
     if query == '':
         session.pop('query', None)
@@ -32,7 +33,6 @@ def search():
         return render_template('results.html', data=[], length=0)
     global results
     results = {tuple_item[1]: tuple_item[0] for tuple_item in rows}
-    global creds, requirements, departments, class_level, breadths, genEds
     creds = []
     requirements = []
     departments = []
