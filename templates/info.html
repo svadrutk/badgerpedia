@@ -90,33 +90,33 @@
     </div>
 
     <div class="className classTimeTitle" style="color: #fff"><b>Class Times -- {{term}}</b></div>
-
+<div class="classTimesContainer">
     <table class="classTimes">
         <tr>
-            <th>Section</th>
-            <th>Times</th>
-            <th>Location</th>
-            <th>Instructor</th>
-            <th>Enrolled</th>
-            <th>Waitlist</th>
+            <th class="section">Section</th>
+            <th class="times">Times</th>
+            <th class="location">Location</th>
+            <th class="instructor">Instructor</th>
+            <th class="enrolled">Enrolled</th>
+            <th class="waitlist">Waitlist</th>
         </tr>
         {% for time in times %}
         {% if time['type'] == 'LEC' %}
         <tr>
             {% if time['capacity'] - time['currentlyEnrolled'] < 1 %}
-            <td style="background-color: #ff5a5a; color: black;">{{ time['type'] }}&nbsp;{{ time['sectionNumber'] }}</td>
+            <td class="section" style="background-color: #ff5a5a; color: black;">{{ time['type'] }}&nbsp;{{ time['sectionNumber'] }}</td>
             {% else %}
-            <td style="background-color: #04dd78; color: black;">{{ time['type'] }}&nbsp;{{ time['sectionNumber'] }}</td>
+            <td class="section" style="background-color: #04dd78; color: black;">{{ time['type'] }}&nbsp;{{ time['sectionNumber'] }}</td>
             {% endif %}
-            <td>{{ time['meetingDays'] }}&nbsp;{{ time['meetingTimes'][0] }} - {{ time['meetingTimes'][1] }}</td>
-            <td>{{ time['location'][0] }}&nbsp;{{ time['location'][1] }}</td>
-            <td>{{ time['instructor'] }}</td>
+            <td class="times">{{ time['meetingDays'] }}&nbsp;{{ time['meetingTimes'][0] }} - {{ time['meetingTimes'][1] }}</td>
+            <td class="location">{{ time['location'][0] }}&nbsp;{{ time['location'][1] }}</td>
+            <td class="instructor">{{ time['instructor'] }}</td>
             {% if time['capacity'] - time['currentlyEnrolled'] < 1 %}
-            <td style="color: #ff5a5a">{{ time['currentlyEnrolled'] }} / {{ time['capacity'] }}</td>
+            <td class="enrolled" style="color: #ff5a5a">{{ time['currentlyEnrolled'] }} / {{ time['capacity'] }}</td>
             {% else %}
-            <td style="color: #04dd78;">{{ time['currentlyEnrolled'] }} / {{ time['capacity'] }}</td>
+            <td class="enrolled" style="color: #04dd78;">{{ time['currentlyEnrolled'] }} / {{ time['capacity'] }}</td>
             {% endif %}
-            <td>{{ time['waitlistCurrentSize'] }}</td>
+            <td class="waitlist">{{ time['waitlistCurrentSize'] }}</td>
         </tr>
         {% else %}
         <tr>
@@ -133,19 +133,13 @@
         </tr>
         {% endif %}
         {% endfor %}
+    </table>
+</div>
 
 
 
 
-
-
-
-
-
-    <div class="enrollmentData">
-
-
-    </div>
+    <div class="enrollmentData"></div>
 
 </div>
     <script>

@@ -109,7 +109,8 @@
                 </form>
             </div>
         </div>
-        <div class="subgrid">
+        <div class="subgrid sub-3">
+            <button onclick="goBack()" class="back-button" style="background-color: #0d0d0d; color: #fff; border: none;"><i data-feather="chevron-left" class="back-icon"></i></button>
             <div id="class_info"></div>
         </div>
     </div>
@@ -214,5 +215,23 @@ document.addEventListener('click', function(event) {
     sub.style.height = isVisible ? '100%' : 'auto';
   });
 });
+</script>
+<script>
+// check if mobile
+
+
+    document.addEventListener('htmx:afterOnLoad', function(event) {
+    if (event.detail.target.id === 'class_info' && window.innerWidth < 1200) {
+        document.getElementsByClassName('sub-1')[0].style.display = 'none';
+        document.getElementsByClassName('sub-2')[0].style.display = 'none';
+        document.getElementsByClassName('sub-3')[0].style.display = 'block';
+    }
+});
+
+function goBack() {
+    document.getElementsByClassName('sub-1')[0].style.display = 'block';
+    document.getElementsByClassName('sub-2')[0].style.display = 'block';
+    document.getElementsByClassName('sub-3')[0].style.display = 'none';
+}
 </script>
 </html>

@@ -210,12 +210,16 @@ def extract_class_info(json_data):
               room = "N/A"
             try:
               currentlyEnrolled = enrollment_status.get("currentlyEnrolled")
+            except:
+              currentlyEnrolled = 0
+            try:
               capacity = enrollment_status.get("capacity")
+            except:
+              capacity = 1
+            try:
               waitlistCurrentSize = enrollment_status.get("waitlistCurrentSize")
             except:
-              currentlyEnrolled = "N/A"
-              capacity = "N/A"
-              waitlistCurrentSize = "N/A"
+              waitlistCurrentSize = 0
             class_info = {
                 "type": typ,
                 "sectionNumber": secNum,
@@ -224,9 +228,9 @@ def extract_class_info(json_data):
                 "meetingDays": meetingDaysList,
                 "meetingTimes": [startTime, endTime],
                 "location": [room, building],
-                "currentlyEnrolled": currentlyEnrolled,
-                "capacity": capacity,
-                "waitlistCurrentSize": waitlistCurrentSize,
+                "currentlyEnrolled": int(currentlyEnrolled),
+                "capacity": int(capacity),
+                "waitlistCurrentSize": int(waitlistCurrentSize),
             }
             class_info_list.append(class_info)
 

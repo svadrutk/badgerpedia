@@ -394,12 +394,14 @@ table tbody tr {
   border-bottom: 1px solid #616161;
 }
 
-table tbody tr:last-of-type {
-  border-bottom: 2px solid #ff5a5a;
-}
+
 
 #menuButton {
   display: none; /* Initially hidden */
+}
+
+.back-button {
+  display: none;
 }
 
 /* Media Queries for Responsiveness */
@@ -548,6 +550,29 @@ tr th td {
 
 table {
   width: 100%;
+}
+
+.sub-3 {
+  display: none;
+}
+
+.back-button {
+  position: absolute;
+  top: 1.5rem;
+  left: 0.5rem;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+
+.back-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.classTimesContainer {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* For smooth scrolling on iOS */
 }
 
 }
