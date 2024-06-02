@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>badgerpedia</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="https://unpkg.com/feather-icons"></script>
@@ -15,83 +16,93 @@
 <body>
     <div class="navbar">badgerpedia.</div>
     <div class="grid">
-        <div class="subgrid">
+        <div class="subgrid sub-1">
             <div class="search">
                 <div class="searchBlock"><i data-feather="search" class="search-icon"></i></div>
                 <div class="searchBlock"><input type="text" class="searchbar" hx-post="/search" hx-trigger="keyup delay:100ms" hx-target="#search_results" placeholder="Search for a class code..." name="q" autocomplete="off"></div>
+                <button id="menuButton"><i data-feather="menu" class="search-icon-2"></i></button>
             </div>
-            <p><b>Credits</b></p>
-            <div class="multi-select" id="multi-select-credits">
-                <div class="select-box" onclick="toggleOptions('multi-select-credits')">
-                    <div class="selected-options" id="selected-credits"></div>
-                    <span class="placeholder">Select Credits</span>
-                </div>
-                <div class="options">
-                    <div class="option" data-value="1" onclick="toggleSelection(this, 'multi-select-credits', '1')">1 Credit</div>
-                    <div class="option" data-value="2" onclick="toggleSelection(this, 'multi-select-credits', '2')">2 Credits</div>
-                    <div class="option" data-value="3" onclick="toggleSelection(this, 'multi-select-credits', '3')">3 Credits</div>
-                    <div class="option" data-value="4" onclick="toggleSelection(this, 'multi-select-credits', '4')">4 Credits</div>
-                    <div class="option" data-value="5" onclick="toggleSelection(this, 'multi-select-credits', '5')">5 Credits</div>
-                    <div class="option" data-value="6" onclick="toggleSelection(this, 'multi-select-credits', '6')">6 Credits</div>
-                </div>
-            </div>
-            <p><b>Breadths</b></p>
-            <div class="multi-select" id="multi-select-breadths">
-                <div class="select-box" onclick="toggleOptions('multi-select-breadths')">
-                    <div class="selected-options" id="selected-breadths"></div>
-                    <span class="placeholder">Select Breadths</span>
-                </div>
-                <div class="options">
-                    <div class="option" data-value="BIO" onclick="toggleSelection(this, 'multi-select-breadths', 'BIO')">Biological Sciences</div>
-                    <div class="option" data-value="HUM" onclick="toggleSelection(this, 'multi-select-breadths', 'HUM')">Humanities</div>
-                    <div class="option" data-value="LIT" onclick="toggleSelection(this, 'multi-select-breadths', 'LIT')">Literature</div>
-                    <div class="option" data-value="PHY" onclick="toggleSelection(this, 'multi-select-breadths', 'PHY')">Physical Sciences</div>
-                    <div class="option" data-value="SOC" onclick="toggleSelection(this, 'multi-select-breadths', 'SOC')">Social Sciences</div>
+            <div class="credits">
+                <p class="filterTitle"><b>Credits</b></p>
+                <div class="multi-select" id="multi-select-credits">
+                    <div class="select-box" onclick="toggleOptions('multi-select-credits')">
+                        <div class="selected-options" id="selected-credits"></div>
+                        <span class="placeholder">Select Credits</span>
+                    </div>
+                    <div class="options">
+                        <div class="option" data-value="1" onclick="toggleSelection(this, 'multi-select-credits', '1')">1 Credit</div>
+                        <div class="option" data-value="2" onclick="toggleSelection(this, 'multi-select-credits', '2')">2 Credits</div>
+                        <div class="option" data-value="3" onclick="toggleSelection(this, 'multi-select-credits', '3')">3 Credits</div>
+                        <div class="option" data-value="4" onclick="toggleSelection(this, 'multi-select-credits', '4')">4 Credits</div>
+                        <div class="option" data-value="5" onclick="toggleSelection(this, 'multi-select-credits', '5')">5 Credits</div>
+                        <div class="option" data-value="6" onclick="toggleSelection(this, 'multi-select-credits', '6')">6 Credits</div>
+                    </div>
                 </div>
             </div>
-            <p><b>Requirements</b></p>
-            <div class="multi-select" id="multi-select-requirements">
-                <div class="select-box" onclick="toggleOptions('multi-select-requirements')">
-                    <div class="selected-options" id="selected-requirements"></div>
-                    <span class="placeholder">Select Requirements</span>
-                </div>
-                <div class="options">
-                    <div class="option" data-value="ETHNIC" onclick="toggleSelection(this, 'multi-select-requirements', 'ETHNIC')">Ethnic Studies</div>
-                    <div class="option" data-value="L&S" onclick="toggleSelection(this, 'multi-select-requirements', 'L&S')">L&S Requirement</div>
-                    <div class="option" data-value="HONORS" onclick="toggleSelection(this, 'multi-select-requirements', 'HONORS')">Honors</div>
-                    <div class="option" data-value="WORKPLACE" onclick="toggleSelection(this, 'multi-select-requirements', 'WORKPLACE')">Workplace Credit</div>
-                    <div class="option" data-value="FOREIGN" onclick="toggleSelection(this, 'multi-select-requirements', 'FOREIGN')">Foreign Language</div>
-                </div>
-            </div>
-            <p><b>General Education</b></p>
-            <div class="multi-select" id="multi-select-genEd">
-                <div class="select-box" onclick="toggleOptions('multi-select-genEd')">
-                    <div class="selected-options" id="selected-genEd"></div>
-                    <span class="placeholder">Select Designations</span>
-                </div>
-                <div class="options">
-                    <div class="option" data-value="COMM A" onclick="toggleSelection(this, 'multi-select-genEd', 'COMM A')">COMM A</div>
-                    <div class="option" data-value="COMM B" onclick="toggleSelection(this, 'multi-select-genEd', 'COMM B')">COMM B</div>
-                    <div class="option" data-value="QR-A" onclick="toggleSelection(this, 'multi-select-genEd', 'QR-A')">QR-A</div>
-                    <div class="option" data-value="QR-B" onclick="toggleSelection(this, 'multi-select-genEd', 'QR-B')">QR-B</div>
+            <div class="breadths">
+                <p class="filterTitle"><b>Breadths</b></p>
+                <div class="multi-select" id="multi-select-breadths">
+                    <div class="select-box" onclick="toggleOptions('multi-select-breadths')">
+                        <div class="selected-options" id="selected-breadths"></div>
+                        <span class="placeholder">Select Breadths</span>
+                    </div>
+                    <div class="options">
+                        <div class="option" data-value="BIO" onclick="toggleSelection(this, 'multi-select-breadths', 'BIO')">Biological Sciences</div>
+                        <div class="option" data-value="HUM" onclick="toggleSelection(this, 'multi-select-breadths', 'HUM')">Humanities</div>
+                        <div class="option" data-value="LIT" onclick="toggleSelection(this, 'multi-select-breadths', 'LIT')">Literature</div>
+                        <div class="option" data-value="PHY" onclick="toggleSelection(this, 'multi-select-breadths', 'PHY')">Physical Sciences</div>
+                        <div class="option" data-value="SOC" onclick="toggleSelection(this, 'multi-select-breadths', 'SOC')">Social Sciences</div>
+                    </div>
                 </div>
             </div>
-            <p><b>Class Level</b></p>
-            <div class="multi-select" id="multi-select-classlevel">
-                <div class="select-box" onclick="toggleOptions('multi-select-classlevel')">
-                    <div class="selected-options" id="selected-classlevel"></div>
-                    <span class="placeholder">Select Class Level</span>
-                </div>
-                <div class="options">
-                    <div class="option" data-value="ELEM" onclick="toggleSelection(this, 'multi-select-classlevel', 'ELEM')">Elementary</div>
-                    <div class="option" data-value="INTER" onclick="toggleSelection(this, 'multi-select-classlevel', 'INTER')">Intermediate</div>
-                    <div class="option" data-value="ADV" onclick="toggleSelection(this, 'multi-select-classlevel', 'ADV')">Advanced</div>
+            <div class="reqs">
+                <p class="filterTitle"><b>Requirements</b></p>
+                <div class="multi-select" id="multi-select-requirements">
+                    <div class="select-box" onclick="toggleOptions('multi-select-requirements')">
+                        <div class="selected-options" id="selected-requirements"></div>
+                        <span class="placeholder">Select Requirements</span>
+                    </div>
+                    <div class="options">
+                        <div class="option" data-value="ETHNIC" onclick="toggleSelection(this, 'multi-select-requirements', 'ETHNIC')">Ethnic Studies</div>
+                        <div class="option" data-value="L&S" onclick="toggleSelection(this, 'multi-select-requirements', 'L&S')">L&S Requirement</div>
+                        <div class="option" data-value="HONORS" onclick="toggleSelection(this, 'multi-select-requirements', 'HONORS')">Honors</div>
+                        <div class="option" data-value="WORKPLACE" onclick="toggleSelection(this, 'multi-select-requirements', 'WORKPLACE')">Workplace Credit</div>
+                        <div class="option" data-value="FOREIGN" onclick="toggleSelection(this, 'multi-select-requirements', 'FOREIGN')">Foreign Language</div>
+                    </div>
                 </div>
             </div>
-
+            <div class="genEds">
+                <p class="filterTitle"><b>General Education</b></p>
+                <div class="multi-select" id="multi-select-genEd">
+                    <div class="select-box" onclick="toggleOptions('multi-select-genEd')">
+                        <div class="selected-options" id="selected-genEd"></div>
+                        <span class="placeholder">Select Designations</span>
+                    </div>
+                    <div class="options">
+                        <div class="option" data-value="COMM A" onclick="toggleSelection(this, 'multi-select-genEd', 'COMM A')">COMM A</div>
+                        <div class="option" data-value="COMM B" onclick="toggleSelection(this, 'multi-select-genEd', 'COMM B')">COMM B</div>
+                        <div class="option" data-value="QR-A" onclick="toggleSelection(this, 'multi-select-genEd', 'QR-A')">QR-A</div>
+                        <div class="option" data-value="QR-B" onclick="toggleSelection(this, 'multi-select-genEd', 'QR-B')">QR-B</div>
+                    </div>
+                </div>
+            </div>
+            <div class="classlvl">
+                <p class="filterTitle"><b>Class Level</b></p>
+                <div class="multi-select" id="multi-select-classlevel">
+                    <div class="select-box" onclick="toggleOptions('multi-select-classlevel')">
+                        <div class="selected-options" id="selected-classlevel"></div>
+                        <span class="placeholder">Select Class Level</span>
+                    </div>
+                    <div class="options">
+                        <div class="option" data-value="ELEM" onclick="toggleSelection(this, 'multi-select-classlevel', 'ELEM')">Elementary</div>
+                        <div class="option" data-value="INTER" onclick="toggleSelection(this, 'multi-select-classlevel', 'INTER')">Intermediate</div>
+                        <div class="option" data-value="ADV" onclick="toggleSelection(this, 'multi-select-classlevel', 'ADV')">Advanced</div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="subgrid">
+        <div class="subgrid sub-2">
             <div class="results">
                 <form hx-post="/show_info" hx-target="#class_info" hx-trigger="submit" hx-swap="innerHTML">
                     <div id="search_results"></div>
@@ -181,6 +192,27 @@ document.addEventListener('click', function(event) {
             element.classList.remove('active');
         });
     }
+});
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const menuButton = document.getElementById('menuButton');
+    const credits = document.querySelector('.credits');
+    const breadths = document.querySelector('.breadths');
+    const reqs = document.querySelector('.reqs');
+    const genEds = document.querySelector('.genEds');
+    const classlvl = document.querySelector('.classlvl');
+    const sub = document.querySelector('.sub-1');
+
+  menuButton.addEventListener('click', function () {
+    const isVisible = credits.style.display === 'block';
+    credits.style.display = isVisible ? 'none' : 'block';
+    breadths.style.display = isVisible ? 'none' : 'block';
+    reqs.style.display = isVisible ? 'none' : 'block';
+    genEds.style.display = isVisible ? 'none' : 'block';
+    classlvl.style.display = isVisible ? 'none' : 'block';
+    sub.style.height = isVisible ? '100%' : 'auto';
+  });
 });
 </script>
 </html>

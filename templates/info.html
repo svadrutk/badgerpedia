@@ -3,7 +3,7 @@
 <div class="info">
     <div class="classTitle">{{ data[0][0] }}</div>
     <div class="className">{{ data[0][1] }}</div>
-    <div class="className" style="color: #8a8a8a; font-size: 1.1rem;">Average Grade:
+    <div class="className" style="color: #8a8a8a;">Average Grade:
         <span>
             {% if data[0][26] == "A " %}
             <span style="color: #04dd78; font-weight: 600;">{{ data[0][26] }}</span>
@@ -27,7 +27,7 @@
         <button onClick="showChart()" class="chartButton"><i id="toggleIcon" data-feather="chevron-right" style="color: #2988ee; height: 1.1rem;"></i></button>
 
     </div>
-    <div class="className" style="color: #8a8a8a; font-size: 1.1rem;">Enrolled:
+    <div class="className" style="color: #8a8a8a;">Enrolled:
     {% if capacity[1] != 0 %}
     {% if capacity[0] == 0 and capacity[1] == 1 %}
     <span style="color: #ff1b1b">N/A</span>
@@ -89,7 +89,7 @@
         <canvas id="gradeChart" style="display: none;"></canvas>
     </div>
 
-    <div class="className" style="color: #fff"><b>Class Times -- {{term}}</b></div>
+    <div class="className classTimeTitle" style="color: #fff"><b>Class Times -- {{term}}</b></div>
 
     <table class="classTimes">
         <tr>

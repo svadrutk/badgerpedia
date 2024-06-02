@@ -398,44 +398,157 @@ table tbody tr:last-of-type {
   border-bottom: 2px solid #ff5a5a;
 }
 
+#menuButton {
+  display: none; /* Initially hidden */
+}
+
 /* Media Queries for Responsiveness */
 @media (max-width: 1200px) {
   .grid {
-    grid-template-columns: 1fr;
+    display: grid;
+    height: 100vh;
+    background-color: #000;
+    grid-template-rows: 10vh 15vh 75vh;
+    grid-template-columns: none;
   }
 
-  .result {
-    grid-template-columns: 1fr;
+  .subgrid {
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    height: 100vh;
+    background-color: #0d0d0d;
+    border: 1px solid #232323;
+    overflow: scroll;
   }
-}
 
-@media (max-width: 768px) {
   .navbar {
+    display: flex;
     font-size: 1.5rem;
-    flex-direction: column;
-    text-align: center;
+    justify-content: center;
+    font-weight: 600;
+    padding: 20px;
+    margin: auto auto;
+    color: #ffffff;
+    background-color: #0d0d0d;
+    border-bottom: 1px solid #232323;
   }
 
-  .searchBlock {
-    margin-left: 0;
-    margin-right: 0;
+  .sub-1 {
+    justify-content: center;
   }
 
-  .classAttributes {
-    grid-template-columns: 1fr 1fr;
-  }
 
-  .info {
-    padding: 15px;
-  }
 
-  .gradeChart {
+
+  .searchbar {
+    font-size: 1.3rem;
+    background-color: #0d0d0d;
+  }
+  .search-icon, .search-icon-2 {
+    width: 1rem;
+    height: 1rem;
+  }
+  .search {
+    display: grid;
+    grid-template-columns: 0.05fr 0.9fr 0.05fr;
+    margin-bottom: 5px;
     width: 100%;
+    padding: 10px;
+    background-color: #0d0d0d;
+    border-left: 0.1rem solid #0d0d0d;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+
+    align-items: center;
   }
 
-  .requirements {
-    height: 40vh;
+  .search:focus-within {
+    border-left: 0.1rem solid #ff5a5a;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
   }
+
+
+
+  .filterTitle, .length {
+    display: none;
+  }
+
+  #menuButton {
+    display: inline;
+    color: #ffffff;
+    background-color: #0d0d0d;
+    border: none;
+  }
+  .credits, .breadths, .reqs, .genEds, .classlvl {
+    display: none;
+  }
+  .search:focus-within .search-icon-2 {
+    color: #fff;
+  }
+
+  .placeholder,
+.multi-select .select-box::after,
+.multi-select .option,
+.multi-select .selected-options .selected-option,
+.multi-select .selected-options .selected-option .delete-option {
+    font-size: 1rem;
 }
 
+.multi-select {
+  margin: 5px 0;
+}
+
+.classTitle {
+    font-size: 1.5rem;
+}
+
+.className {
+    font-size: 1rem !important;
+}
+
+.classDescription {
+    font-size: 1rem;
+}
+
+span {
+    font-size: 1rem;
+}
+
+ .classLevel {
+  display: none;
+}
+
+.classCredits, .repeatable {
+  font-size: 0.75rem;
+}
+
+.classAttributes {
+  grid-template-columns: 1fr 1fr;
+}
+
+.classDescription {
+  font-size: 0.75rem;
+}
+
+#toggleIcon {
+  display: none;
+}
+
+.classTimeTitle {
+  font-size: 1.5rem;
+}
+
+tr th td {
+  font-size: 0.5rem !important;
+}
+
+table {
+  width: 100%;
+}
+
+}
 
