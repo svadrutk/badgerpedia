@@ -17,6 +17,7 @@
 </head>
 <body>
     <div class="navbar">badgerpedia.</div>
+
     <div class="grid">
         <div class="subgrid sub-1">
             <div class="search">
@@ -112,14 +113,15 @@
             </div>
         </div>
         <div class="subgrid sub-3">
-            <button onclick="goBack()" class="back-button" style="background-color: #0d0d0d; color: #fff; border: none;"><i data-feather="chevron-left" class="back-icon"></i></button>
+            <button onclick="goBack()" class="back-button"><i data-feather="chevron-left" class="back-icon"></i></button>
             <div id="class_info"></div>
         </div>
     </div>
 </body>
 <script>
-feather.replace({ class: 'foo bar', 'stroke-width': 3, 'height': 15 });
-
+feather.replace();
+</script>
+<script>
 function toggleOptions(id) {
     document.querySelector(`#${id} .options`).classList.toggle('active');
 }
@@ -236,4 +238,5 @@ function goBack() {
     document.getElementsByClassName('sub-3')[0].style.display = 'none';
 }
 </script>
+
 </html>

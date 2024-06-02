@@ -404,6 +404,8 @@ table tbody tr {
   display: none;
 }
 
+
+
 /* Media Queries for Responsiveness */
 @media (max-width: 1200px) {
   .grid {
@@ -563,11 +565,17 @@ table {
   margin: 0;
   padding: 0;
   display: inline-block;
+  color: #ffffff;
+  background-color: #0d0d0d;
+  border: none;
 }
 
 .back-icon {
   width: 1.5rem;
   height: 1.5rem;
+  color: #ffffff;
+  border: none;
+  background-color: #0d0d0d;
 }
 
 .classTimesContainer {
