@@ -125,7 +125,7 @@ def get_enrollment(class_codes):
     return classData
   except Exception:
     print(traceback.print_exc())
-    return [False, name]
+    return False
 
 def get_capacity(data):
     # Access the enrollmentStatus object

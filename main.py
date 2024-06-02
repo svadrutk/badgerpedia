@@ -4,8 +4,9 @@ import enrollment
 import time
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'
+app.secret_key = 'your_secret_key' # secret key for session management; change this to something more secure
 
+# constants to store the filters
 creds = []
 requirements = []
 departments = []
@@ -20,7 +21,7 @@ def index():
 @app.route('/search', methods=['POST'])
 def search():
     global creds, requirements, departments, class_level, breadths, genEds
-    query = request.form.get('q')
+    query = request.form.get('q') # get the query from the form
     if query == '':
         session.pop('query', None)
     else:
@@ -30,9 +31,12 @@ def search():
             session['query'] = query
     rows = dbSearch.search_db(query, creds, requirements, breadths, genEds, class_level)
     if rows is None:
-        return render_template('results.html', data=[], length=0)
+        return render_template('results.html', data=[], length=0) # if no results, return empty list
+
     global results
     results = {tuple_item[1]: tuple_item[0] for tuple_item in rows}
+
+    # reset the filters
     creds = []
     requirements = []
     departments = []
@@ -45,11 +49,12 @@ def search():
 
 @app.route('/show_info', methods=['POST'])
 def show_info():
-    value = request.form['class-button']
+    value = request.form['class-button'] # get class code from button
     print(value)
-    f = dbSearch.getData(value)
-    capacity = enrollment.get_capacity(enrollment.get_enrollment(enrollment.get_class_codes(value)))
+    f = dbSearch.getData(value) # get the data for the class
+    capacity = enrollment.get_capacity(enrollment.get_enrollment(enrollment.get_class_codes(value))) # get enrollment stats for the class from the API
 
+    # calculate the term based on the current month
     currMonth = time.localtime().tm_mon
     if currMonth >= 5 and currMonth < 9:
         term =  "Fall " + str(time.localtime().tm_year)
@@ -58,15 +63,18 @@ def show_info():
     else:
         term = "Summer " + str(time.localtime().tm_year)
 
+
+    # get the times for the class
     timesDict = enrollment.extract_class_info(enrollment.get_enrollment(enrollment.get_class_codes(value)))
 
 
     return render_template('info.html', data=f, capacity=capacity, term = term, times = timesDict)
 
-@app.route('/course/<int:course_id>')
-def course_details(course_id):
-    f = dbSearch.getData(course_id)
-    return render_template('info.html', data=f)
+
+
+############################################################################################
+# Filter functions
+############################################################################################
 
 @app.route('/filter_credits', methods=['POST'])
 def filter_credits():

@@ -1,5 +1,7 @@
+<!-- This is the base template for the application. It contains the basic structure of the application,
+    including the navbar, grid layout, and the search bar. -->
+<!-- The base template also includes the necessary scripts and stylesheets for the application. -->
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,9 +11,9 @@
     <script src="https://unpkg.com/feather-icons"></script>
     <script src="https://unpkg.com/htmx.org@1.9.11"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-deferred@1"></script>
-<link rel="shortcut icon" href="{{ url_for('static', filename='badger.ico') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-deferred@1"></script>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='badger.ico') }}">
 </head>
 <body>
     <div class="navbar">badgerpedia.</div>
@@ -212,7 +214,7 @@ document.addEventListener('click', function(event) {
     reqs.style.display = isVisible ? 'none' : 'block';
     genEds.style.display = isVisible ? 'none' : 'block';
     classlvl.style.display = isVisible ? 'none' : 'block';
-    sub.style.height = isVisible ? '100%' : 'auto';
+    sub.style.height = isVisible ? '100%' : '50vh';
   });
 });
 </script>

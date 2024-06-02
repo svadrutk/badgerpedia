@@ -1,4 +1,10 @@
+<!-- This is the results.html file. This file is responsible for rendering the search results. -->
+<!-- The results are displayed in a list format, with each result being a button. -->
+<!-- The button contains the class number, class name, and grade. -->
+<!-- The grade is color-coded based on the grade received. -->
+
 <!DOCTYPE html>
+<html lang="en">
     <div class="length">{{length|safe}} Results</div>
     {% for item in data %}
     <button class="result-button" name="class-button" value="{{ item[0] }}">

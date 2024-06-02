@@ -5,6 +5,7 @@ import numpy as np
 import cleanup
 
 COURSES_URL = "https://guide.wisc.edu/courses/"
+
 df = pd.DataFrame()
 courseBlockList = []
 courseNamesList = []
@@ -144,9 +145,10 @@ def main():
         df['Last Taught'] = lastTaughtList
         df['Course Designation'] = courseDesignationList
 
+        # Clean the data using the cleanup.py file
         f = cleanup.cleanup_data(df)
 
-        f.to_csv('data/classes.csv', index=False)
+        f.to_csv('classes.csv', index=False)
 
 
 if __name__ == "__main__":
