@@ -16,7 +16,7 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='badger.ico') }}">
 </head>
 <body>
-    <div class="navbar">badgerpedia.</div>
+    <div class="navbar"><button class="home-button" onclick="goBack()">badgerpedia.</button></div>
 
     <div class="grid">
         <div class="subgrid sub-1">
@@ -113,7 +113,6 @@
             </div>
         </div>
         <div class="subgrid sub-3">
-            <button onclick="goBack()" class="back-button"><i data-feather="chevron-left" class="back-icon"></i></button>
             <div id="class_info"></div>
         </div>
     </div>
@@ -233,9 +232,11 @@ document.addEventListener('click', function(event) {
 });
 
 function goBack() {
-    document.getElementsByClassName('sub-1')[0].style.display = 'block';
-    document.getElementsByClassName('sub-2')[0].style.display = 'block';
-    document.getElementsByClassName('sub-3')[0].style.display = 'none';
+    if (window.innerWidth < 1200) {
+        document.getElementsByClassName('sub-1')[0].style.display = 'block';
+        document.getElementsByClassName('sub-2')[0].style.display = 'block';
+        document.getElementsByClassName('sub-3')[0].style.display = 'none';
+    }
 }
 </script>
 
