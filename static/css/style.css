@@ -575,6 +575,9 @@ body, html {
   height: auto;
 }
 
+.search-icon-2 {
+  display: none;
+}
 
 }
 
