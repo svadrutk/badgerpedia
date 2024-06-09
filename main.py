@@ -9,7 +9,7 @@ app.secret_key = 'your_secret_key'  # secret key for session management; change 
 # Initialize the session with default filter values
 @app.before_request
 def make_session_permanent():
-    session.permanent = True
+    session.permanent = False
     if 'filters' not in session:
         session['filters'] = {
             'creds': [],
@@ -22,12 +22,19 @@ def make_session_permanent():
 
 @app.route('/')
 def index():
+    session['filters'] = {
+        'creds': [],
+        'requirements': [],
+        'departments': [],
+        'class_level': [],
+        'breadths': [],
+        'genEds': []
+    }
     return render_template('base.html', length=0)
 
-@app.route('/search', methods=['POST'])
+@app.route('/search', methods=['GET'])
 def search():
-    query = request.form.get('q')  # get the query from the form
-
+    query = request.args.get('q')  # get the query from the form
     if query == '':
         session.pop('query', None)
     else:
@@ -46,9 +53,9 @@ def search():
 
     return render_template('results.html', data=rows, length=len(rows))
 
-@app.route('/show_info', methods=['POST'])
+@app.route('/show_info', methods=['GET'])
 def show_info():
-    value = request.form['class-button']  # get class code from button
+    value = request.args.get('class-button')  # get class code from button
     print(value)
     f = dbSearch.getData(value)  # get the data for the class
     capacity = enrollment.get_capacity(enrollment.get_enrollment(enrollment.get_class_codes(value)))  # get enrollment stats for the class from the API
@@ -71,7 +78,7 @@ def show_info():
 # Filter functions
 ############################################################################################
 
-@app.route('/filter_credits', methods=['POST'])
+@app.route('/filter_credits', methods=['GET'])
 def filter_credits():
     filters = session['filters']
     filters['creds'] = request.json.get('values', [])
@@ -79,7 +86,7 @@ def filter_credits():
     print(filters['creds'])
     return search()
 
-@app.route('/filter_requirements', methods=['POST'])
+@app.route('/filter_requirements', methods=['GET'])
 def filter_requirements():
     filters = session['filters']
     filters['requirements'] = request.json.get('values', [])
@@ -87,7 +94,7 @@ def filter_requirements():
     print(filters['requirements'])
     return search()
 
-@app.route('/filter_department', methods=['POST'])
+@app.route('/filter_department', methods=['GET'])
 def filter_departments():
     filters = session['filters']
     filters['departments'] = request.json.get('values', [])
@@ -95,7 +102,7 @@ def filter_departments():
     print(filters['departments'])
     return search()
 
-@app.route('/filter_classlevel', methods=['POST'])
+@app.route('/filter_classlevel', methods=['GET'])
 def filter_class_level():
     filters = session['filters']
     filters['class_level'] = request.json.get('values', [])
@@ -105,7 +112,7 @@ def filter_class_level():
     print(filters['creds'])
     return search()
 
-@app.route('/filter_breadths', methods=['POST'])
+@app.route('/filter_breadths', methods=['GET'])
 def filter_breadths():
     filters = session['filters']
     filters['breadths'] = request.json.get('values', [])
@@ -113,7 +120,7 @@ def filter_breadths():
     print(filters['breadths'])
     return search()
 
-@app.route('/filter_genEd', methods=['POST'])
+@app.route('/filter_genEd', methods=['GET'])
 def filter_genEd():
     filters = session['filters']
     filters['genEds'] = request.json.get('values', [])

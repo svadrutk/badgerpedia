@@ -146,7 +146,6 @@ def get_capacity(data):
         currently_enrolled += enrollment_status['currentlyEnrolled']
       else:
         currently_enrolled += enrollment_status['aggregateCurrentlyEnrolled']
-
     return [currently_enrolled, capacity]
 
 

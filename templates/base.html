@@ -22,7 +22,7 @@
         <div class="subgrid sub-1">
             <div class="search">
                 <div class="searchBlock"><i data-feather="search" class="search-icon"></i></div>
-                <div class="searchBlock"><input type="text" class="searchbar" hx-post="/search" hx-trigger="keyup delay:100ms" hx-target="#search_results" placeholder="Search for a class code..." name="q" autocomplete="off"></div>
+                <div class="searchBlock"><input type="text" class="searchbar" hx-get="/search" hx-trigger="keyup delay:100ms" hx-target="#search_results" placeholder="Search for a class code..." name="q" autocomplete="off"></div>
                 <button id="menuButton"><i data-feather="menu" class="search-icon-2"></i></button>
             </div>
             <div class="credits">
@@ -107,7 +107,7 @@
 
         <div class="subgrid sub-2">
             <div class="results">
-                <form hx-post="/show_info" hx-target="#class_info" hx-trigger="submit" hx-swap="innerHTML">
+                <form hx-get="/show_info" hx-target="#class_info" hx-trigger="submit" hx-swap="innerHTML">
                     <div id="search_results"></div>
                 </form>
             </div>
@@ -175,7 +175,7 @@ function sendSelectionsToServer(id) {
     let selectedValues = Array.from(selectedOptionsContainer.children).map(child => child.getAttribute('data-value'));
 
     fetch(`/filter_${id.split('-')[2]}`, {
-        method: 'POST',
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         },
