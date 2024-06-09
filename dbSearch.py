@@ -91,7 +91,7 @@ def search_db(search_term, creds, requirements, breadths, genEds, class_level):
         print("Class level:", class_level)
         params.extend(class_level)
     else:
-        print("No class level filters")
+        print("No class level filt ers")
 
     # Add requirement filters
     requirementsDict = {'L&S': 'lns', 'ETHNIC': 'ethnic', 'HONORS': 'honors', 'GENED': 'genEd', 'WORKPLACE': 'workplace', 'FOREIGN': 'foreignLang'}
