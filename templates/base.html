@@ -173,13 +173,13 @@ function updatePlaceholder(id) {
 function sendSelectionsToServer(id) {
     let selectedOptionsContainer = document.querySelector(`#${id} .selected-options`);
     let selectedValues = Array.from(selectedOptionsContainer.children).map(child => child.getAttribute('data-value'));
-
-    fetch(`/filter_${id.split('-')[2]}`, {
+    console.log("aoifjaoijf")
+    let queryString = selectedValues.map(value => `values=${encodeURIComponent(value)}`).join('&');
+    fetch(`/filter_${id.split('-')[2]}?${queryString}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ values: selectedValues })
+        }
     })
     .then(response => response.text())
     .then(html => {

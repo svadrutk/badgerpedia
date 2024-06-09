@@ -30,6 +30,7 @@ def index():
         'breadths': [],
         'genEds': []
     }
+    print("Filters reset.")
     return render_template('base.html', length=0)
 
 @app.route('/search', methods=['GET'])
@@ -81,7 +82,7 @@ def show_info():
 @app.route('/filter_credits', methods=['GET'])
 def filter_credits():
     filters = session['filters']
-    filters['creds'] = request.json.get('values', [])
+    filters['creds'] = request.args.getlist('values')
     session['filters'] = filters
     print(filters['creds'])
     return search()
@@ -89,7 +90,7 @@ def filter_credits():
 @app.route('/filter_requirements', methods=['GET'])
 def filter_requirements():
     filters = session['filters']
-    filters['requirements'] = request.json.get('values', [])
+    filters['requirements'] = request.args.getlist('values')
     session['filters'] = filters
     print(filters['requirements'])
     return search()
@@ -97,7 +98,7 @@ def filter_requirements():
 @app.route('/filter_department', methods=['GET'])
 def filter_departments():
     filters = session['filters']
-    filters['departments'] = request.json.get('values', [])
+    filters['departments'] = request.args.getlist('values')
     session['filters'] = filters
     print(filters['departments'])
     return search()
@@ -105,7 +106,7 @@ def filter_departments():
 @app.route('/filter_classlevel', methods=['GET'])
 def filter_class_level():
     filters = session['filters']
-    filters['class_level'] = request.json.get('values', [])
+    filters['class_level'] = request.args.getlist('values')
     session['filters'] = filters
     print(filters['class_level'])
     print(filters['breadths'])
@@ -115,7 +116,7 @@ def filter_class_level():
 @app.route('/filter_breadths', methods=['GET'])
 def filter_breadths():
     filters = session['filters']
-    filters['breadths'] = request.json.get('values', [])
+    filters['breadths'] = request.args.getlist('values')
     session['filters'] = filters
     print(filters['breadths'])
     return search()
@@ -123,7 +124,7 @@ def filter_breadths():
 @app.route('/filter_genEd', methods=['GET'])
 def filter_genEd():
     filters = session['filters']
-    filters['genEds'] = request.json.get('values', [])
+    filters['genEds'] = request.args.getlist('values')
     session['filters'] = filters
     print(filters['genEds'])
     return search()
