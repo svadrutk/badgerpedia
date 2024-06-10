@@ -1,2 +1,1 @@
-web: bin/start-nginx-gunicorn
-
+web: gunicorn main:app

@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-# Start Gunicorn on port 8000
-gunicorn -b 127.0.0.1:8000 --access-logfile - --error-logfile - main:app &
-
-# Start Nginx in the foreground
-nginx -c  app/config/nginx.conf.erb
-
