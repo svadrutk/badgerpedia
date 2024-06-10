@@ -106,17 +106,24 @@
         </div>
 
         <div class="subgrid sub-2">
-            <div class="results">
-                <form hx-get="/show_info" hx-target="#class_info" hx-trigger="submit" hx-swap="innerHTML">
-                    <div id="search_results"></div>
-                </form>
-            </div>
+        <div class="results">
+            <form hx-get="/show_info" hx-target="#class_info" hx-trigger="submit" hx-swap="innerHTML">
+                <div id="search_results"></div>
+            </form>
         </div>
+        </div>
+
         <div class="subgrid sub-3">
             <div id="class_info"></div>
         </div>
     </div>
 </body>
+<script>
+    Array.prototype.forEach.call(
+  document.querySelectorAll('.subgrid'),
+  (el) => new SimpleBar(el)
+);
+</script>
 <script>
 feather.replace();
 </script>

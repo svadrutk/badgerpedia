@@ -39,6 +39,15 @@ body {
   overflow: scroll;
 }
 
+.subgrid::-webkit-scrollbar {
+  display: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+
 .search {
   display: flex;
   align-items: center;
