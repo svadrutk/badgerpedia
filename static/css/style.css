@@ -47,6 +47,10 @@ html::-webkit-scrollbar {
   display: none;
 }
 
+*::-webkit-scrollbar {
+  display: none;
+}
+
 
 .search {
   display: flex;
