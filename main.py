@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, session
 import dbSearch
 import enrollment
 import time
+import urllib
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # secret key for session management; change this to something more secure
@@ -21,7 +22,7 @@ def make_session_permanent():
         }
 
 @app.route('/')
-def index():
+def index(data = None, capacity = None, term = None, times = None):
     session['filters'] = {
         'creds': [],
         'requirements': [],
@@ -31,7 +32,13 @@ def index():
         'genEds': []
     }
     print("Filters reset.")
-    return render_template('base.html', length=0)
+
+    if data is not None and capacity is not None and term is not None and times is not None:
+        print("Data: ", data)
+        return render_template('base.html', data=data, capacity=capacity, term=term, times=times)
+    else:
+        print("wtf")
+        return render_template('base.html', length=0)
 
 @app.route('/search', methods=['GET'])
 def search():
@@ -54,12 +61,12 @@ def search():
 
     return render_template('results.html', data=rows, length=len(rows))
 
-@app.route('/show_info', methods=['GET'])
-def show_info():
-    value = request.args.get('class-button')  # get class code from button
-    print(value)
-    f = dbSearch.getData(value)  # get the data for the class
-    capacity = enrollment.get_capacity(enrollment.get_enrollment(enrollment.get_class_codes(value)))  # get enrollment stats for the class from the API
+@app.route('/class/<path:class_code>')
+def show_info(class_code):
+    decoded_class_code = urllib.parse.unquote(class_code)
+    print(decoded_class_code)
+    f = dbSearch.getData(decoded_class_code)  # get the data for the class
+    capacity = enrollment.get_capacity(enrollment.get_enrollment(enrollment.get_class_codes(decoded_class_code)))  # get enrollment stats for the class from the API
 
     # calculate the term based on the current month
     currMonth = time.localtime().tm_mon
@@ -71,9 +78,11 @@ def show_info():
         term = "Summer " + str(time.localtime().tm_year)
 
     # get the times for the class
-    timesDict = enrollment.extract_class_info(enrollment.get_enrollment(enrollment.get_class_codes(value)))
+    timesDict = enrollment.extract_class_info(enrollment.get_enrollment(enrollment.get_class_codes(decoded_class_code)))
 
-    return render_template('info.html', data=f, capacity=capacity, term=term, times=timesDict)
+
+    index(data = f, capacity = capacity, term = term, times = timesDict)
+    return ('', 204)
 
 ############################################################################################
 # Filter functions

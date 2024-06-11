@@ -107,23 +107,245 @@
 
         <div class="subgrid sub-2">
         <div class="results">
-            <form hx-get="/show_info" hx-target="#class_info" hx-trigger="submit" hx-swap="innerHTML">
                 <div id="search_results"></div>
-            </form>
         </div>
         </div>
 
         <div class="subgrid sub-3">
-            <div id="class_info"></div>
+            {% if data is not defined %}
+            <div id="class_info">
+                <div class="info">
+                </div>
+            </div>
+            {% else %}
+            <div id="class_info">
+                <div class="info">
+                    <div class="classTitle">{{ data[0][0] }}</div>
+                    <div class="className">{{ data[0][1] }}</div>
+                    <div class="className" style="color: #8a8a8a;">Average Grade:
+                        <span>
+                            {% if data[0][26] == "A " %}
+                            <span style="color: #04dd78; font-weight: 600;">{{ data[0][26] }}</span>
+                            {% elif data[0][26] == "AB" %}
+                            <span style="color: #04dd78; font-weight: 600;">{{ data[0][26] }}</span>
+                            {% elif data[0][26] == "B " %}
+                            <span style="color: #cfcb4e; font-weight: 600;">{{ data[0][26] }}</span>
+                            {% elif data[0][26] == "BC" %}
+                            <span style="color: #cfcb4e; font-weight: 600;">{{ data[0][26] }}</span>
+                            {% elif data[0][26] == "C " %}
+                            <span style="color: #ff930f; font-weight: 600;">{{ data[0][26] }}</span>
+                            {% elif data[0][26] == "D " %}
+                            <span style="color: #ff3333; font-weight: 600;">{{ data[0][26] }}</span>
+                            {% elif data[0][26] == "F " %}
+                            <span style="color: #ff3333; font-weight: 600;">{{ data[0][26] }}</span>
+                            {% else %}
+                            {{ data[0][26] }}
+                            {% endif %}
+                        </span>
+
+                        <button onClick="showChart()" class="chartButton"><i id="toggleIcon" data-feather="chevron-right" style="color: #2988ee; height: 1.1rem;"></i></button>
+
+                    </div>
+                    <div class="className" style="color: #8a8a8a;">Enrolled:
+                    {% if capacity[1] != 0 %}
+                    {% if capacity[0] == 0 and capacity[1] == 1 %}
+                    <span style="color: #ff1b1b">N/A</span>
+                    {% elif capacity[0]/capacity[1] > 0.9 %}
+                    <span style="color: #ff1b1b">{{capacity[0]}}/{{capacity[1]}}</span>
+                    {% elif capacity[0]/capacity[1] > 0.5 %}
+                    <span style="color: #ff930f">{{capacity[0]}}/{{capacity[1]}}</span>
+                    {% else %}
+                    <span style="color: #04dd78">{{capacity[0]}}/{{capacity[1]}}</span>
+                    {% endif %}
+                    {% else %}
+                    <span style="color: #ff1b1b">N/A</span>
+                    {% endif %}
+                    </div>
+                    <div class="classAttributes">
+                        <div class="classCredits"><i data-feather="check-circle" style="color: #00c889"></i>&nbsp;
+                            {% if data[0][15] == data[0][16] %}
+                            {{ data[0][15] }} Credits
+                            {% else %}
+                            {{ data[0][15] }}-{{ data[0][16] }} Credits
+                            {% endif %}
+                        </div>
+                        <div class="repeatable"><i data-feather="repeat" style="color: #ff1b1b"></i>&nbsp;
+                            {% if data[0][4] == "1" %}
+                            Repeatable for Credit
+                            {% elif data[0][4] == "2" %}
+                            Repeatable 2x for Credit
+                            {% elif data[0][4] == "3" %}
+                            Repeatable 3x for Credit
+                            {% elif data[0][4] == "4" %}
+                            Repeatable 4x for Credit
+                            {% elif data[0][4] == "5" %}
+                            Repeatable 5x for Credit
+                            {% elif data[0][4] == "6" %}
+                            Repeatable 6x for Credit
+                            {% else %}
+                            Not Repeatable
+                            {% endif %}
+                        </div>
+                        <div class="classLevel"><i data-feather="bar-chart" style="color: #15d3f4"></i>&nbsp;
+                            {% if data[0][6] == 1 %}
+                            Elementary
+                            {% elif data[0][6] == 2 %}
+                            Intermediate
+                            {% elif data[0][6] == 3 %}
+                            Advanced
+                            {% elif data[0][6] == 0 %}
+                            No Level
+                            {% else %}
+                            {{ data[0][6] }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="classDescription">{{ data[0][2] }}</div>
+                    <div class="classDescription"><b>Prerequisites</b></div>
+                    <div class="classDescription">{{ data[0][3] }}</div>
+
+                    <div class="gradeChart">
+                        <canvas id="gradeChart" style="display: none;"></canvas>
+                    </div>
+
+                    <div class="className classTimeTitle" style="color: #fff"><b>Class Times -- {{term}}</b></div>
+                <div class="classTimesContainer">
+                    <table class="classTimes">
+                        <tr>
+                            <th class="section">Section</th>
+                            <th class="times">Times</th>
+                            <th class="location">Location</th>
+                            <th class="instructor">Instructor</th>
+                            <th class="enrolled">Enrolled</th>
+                            <th class="waitlist">Waitlist</th>
+                        </tr>
+                        {% for time in times %}
+                        {% if time['type'] == 'LEC' %}
+                        <tr>
+                            {% if time['capacity'] - time['currentlyEnrolled'] < 1 %}
+                            <td class="section" style="background-color: #ff5a5a; color: black;">{{ time['type'] }}&nbsp;{{ time['sectionNumber'] }}</td>
+                            {% else %}
+                            <td class="section" style="background-color: #04dd78; color: black;">{{ time['type'] }}&nbsp;{{ time['sectionNumber'] }}</td>
+                            {% endif %}
+                            <td class="times">{{ time['meetingDays'] }}&nbsp;{{ time['meetingTimes'][0] }} - {{ time['meetingTimes'][1] }}</td>
+                            <td class="location">{{ time['location'][0] }}&nbsp;{{ time['location'][1] }}</td>
+                            <td class="instructor">{{ time['instructor'] }}</td>
+                            {% if time['capacity'] - time['currentlyEnrolled'] < 1 %}
+                            <td class="enrolled" style="color: #ff5a5a">{{ time['currentlyEnrolled'] }} / {{ time['capacity'] }}</td>
+                            {% else %}
+                            <td class="enrolled" style="color: #04dd78;">{{ time['currentlyEnrolled'] }} / {{ time['capacity'] }}</td>
+                            {% endif %}
+                            <td class="waitlist">{{ time['waitlistCurrentSize'] }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td>{{ time['type'] }}&nbsp;{{ time['sectionNumber'] }}</td>
+                            <td>{{ time['meetingDays'] }}&nbsp;{{ time['meetingTimes'][0] }} - {{ time['meetingTimes'][1] }}</td>
+                            <td>{{ time['location'][0] }}&nbsp;{{ time['location'][1] }}</td>
+                            <td>{{ time['instructor'] }}</td>
+                            {% if time['capacity'] - time['currentlyEnrolled'] < 1 %}
+                            <td style="color: #ff5a5a">{{ time['currentlyEnrolled'] }} / {{ time['capacity'] }}</td>
+                            {% else %}
+                            <td style="color: #04dd78;">{{ time['currentlyEnrolled'] }} / {{ time['capacity'] }}</td>
+                            {% endif %}
+                            <td>{{ time['waitlistCurrentSize'] }}</td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </table>
+                </div>
+
+
+
+
+                    <div class="enrollmentData"></div>
+
+                </div>
+                    <script>
+                        function showChart() {
+                            var x = document.getElementById("gradeChart");
+                            var y = document.getElementById("toggleIcon");
+                            var z = document.getElementsByClassName("gradeChart")[0];
+                            if (x.style.display === "none" || x.style.display === "") {
+                                x.style.display = "block";
+                                y.setAttribute("data-feather", "chevron-down");
+                                feather.replace({ class: 'foo bar', 'stroke-width': 3, 'height': 15 });
+
+                            } else {
+                                x.style.display = "none";
+                                y.setAttribute("data-feather", "chevron-right");
+                                feather.replace({ class: 'foo bar', 'stroke-width': 3, 'height': 15 });
+                            }
+                        }
+                    </script>
+                    <script>
+                        var ctx = document.getElementById('gradeChart').getContext('2d');
+                        Chart.register(ChartDataLabels);
+                        var myChart = new Chart(ctx, {
+                            type: 'doughnut',
+                            data: {
+                                labels: ['A', 'AB', 'B', 'BC', 'C', 'D', 'F'],
+                                datasets: [{
+                                    data: [{{ data[0][19] }}, {{ data[0][20] }}, {{ data[0][21] }}, {{ data[0][22] }}, {{ data[0][23] }}, {{ data[0][24] }}, {{ data[0][25]}}],
+                                    backgroundColor: [
+                                    "rgb(47,238,168)", "rgb(80,199,140)", "rgb(112,159,113)", "rgb(145,120,85)", "rgb(177,81,57)", "rgb(210,41,30)", "rgb(242,2,2)",
+                                    ],
+                                datalabels: {
+                                    labels: {
+                                        name: {
+                                            align: 'center',
+                                            font: {size: 16},
+                                            borderColor: 'black',
+                                            borderWidth: 2,
+                                            borderRadius: 25,
+                                            padding: 7
+                                        }
+                                    },
+                                }
+                            }],
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: true,
+                                borderColor: '#212121',
+                                hoverBorderColor: '#fff',
+                                color: '#fff',
+                                plugins: {
+                                    legend: {
+                                        display: false
+                                    },
+                                    datalabels: {
+                                        color: 'black',
+                                        font: {
+                                            weight: 'bold',
+                                        },
+                                        offset: 0,
+                                        padding: 0,
+                                        formatter: function(value, ctx) {
+                                            var dataset = ctx.chart.data.datasets[ctx.datasetIndex];
+                                            var total = dataset.data.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+                                            var percentage = Math.round((value / total) * 100);
+                                            if (percentage > 5) {
+                                                return ctx.chart.data.labels[ctx.dataIndex];
+                                            } else {
+                                                return null; // Hides the label
+                                            }
+                                        },
+                                    },
+
+                                }
+                            }
+                        });
+                        feather.replace({ class: 'foo bar', 'stroke-width': 3, 'height': 15 });
+                    </script>
+            </div>
+            {% endif %}
         </div>
     </div>
 </body>
-<script>
-    Array.prototype.forEach.call(
-  document.querySelectorAll('.subgrid'),
-  (el) => new SimpleBar(el)
-);
-</script>
+
+
+
 <script>
 feather.replace();
 </script>

@@ -5,9 +5,10 @@
   box-sizing: border-box;
 }
 
-body {
+html, body {
   margin: 0;
   padding: 0;
+  overflow: auto; /* Ensure body allows scrolling */
 }
 
 .navbar {
@@ -27,13 +28,14 @@ body {
   height: 100vh;
   background-color: #0f0f0f;
   grid-template-columns: 0.5fr 0.5fr 1fr;
+  overflow: hidden;
 }
 
 .subgrid {
   padding-top: 10px;
   padding-left: 10px;
   padding-right: 10px;
-  height: 100vh;
+  height: 100%;
   background-color: #0d0d0d;
   border: 1px solid #232323;
   overflow: scroll;
@@ -50,7 +52,6 @@ html::-webkit-scrollbar {
 *::-webkit-scrollbar {
   display: none;
 }
-
 
 .search {
   display: flex;
@@ -128,7 +129,7 @@ html {
   display: flex;
   flex-direction: column;
   overflow: scroll !important;
-  height: 100vh;
+  height: 100%;
   width: 100%;
 }
 
@@ -510,7 +511,7 @@ table tbody tr {
     color: #fff;
   }
 
-  .placeholder,
+.placeholder,
 .multi-select .select-box::after,
 .multi-select .option,
 .multi-select .selected-options .selected-option,

@@ -3,28 +3,33 @@
 <!-- The button contains the class number, class name, and grade. -->
 <!-- The grade is color-coded based on the grade received. -->
 
+<!-- results.html -->
 <!DOCTYPE html>
 <html lang="en">
     <div class="length">{{length|safe}} Results</div>
     {% for item in data %}
-    <button class="result-button" name="class-button" value="{{ item[0] }}">
-        <div class="result">
-            <div class="result-block-1">
-                <div class="result-subblock" id="block">{{item[0]}}</div>
-                <div class="result-subblock" id="name">{{item[1]}}</div>
+    <form class=class-link" hx-get="/class/{{ item[0]|urlencode }}" hx-trigger="click" hx-push-url="true">
+        <button class="result-button" type="button">
+            <div class="result">
+                <div class="result-block-1">
+                    <div class="result-subblock" id="block">{{item[0]}}</div>
+                    <div class="result-subblock" id="name">{{item[1]}}</div>
+                </div>
+                <div class="result-block-2">
+                    {% if item[26] == 'A ' or item[26] == 'AB' %}
+                    <div class="result-subblock" id="grade" style="color:#04dd78">{{item[26]}}</div>
+                    {% elif item[26] == 'B ' or item[26] == 'BC' %}
+                    <div class="result-subblock" id="grade" style="color:#cfcb4e">{{item[26]}}</div>
+                    {% elif item[26] == 'C ' %}
+                    <div class="result-subblock" id="grade" style="color:#ff930f">{{item[26]}}</div>
+                    {% else %}
+                    <div class="result-subblock" id="grade" style="color:#ff3333">{{item[26]}}</div>
+                    {% endif %}
+                </div>
             </div>
-            <div class="result-block-2">
-                {% if item[26] == 'A ' or item[26] == 'AB' %}
-                <div class="result-subblock" id="grade" style="color:#04dd78">{{item[26]}}</div>
-                {% elif item[26] == 'B ' or item[26] == 'BC' %}
-                <div class="result-subblock" id="grade" style="color:#cfcb4e">{{item[26]}}</div>
-                {% elif item[26] == 'C ' %}
-                <div class="result-subblock" id="grade" style="color:#ff930f">{{item[26]}}</div>
-                {% else %}
-                <div class="result-subblock" id="grade" style="color:#ff3333">{{item[26]}}</div>
-                {% endif %}
-            </div>
-        </div>
-    </button>
+        </button>
+    </form>
     {% endfor %}
 </html>
+
+
