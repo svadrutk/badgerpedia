@@ -6,8 +6,7 @@
 <!-- results.html -->
     <div class="length">{{length|safe}} Results</div>
     {% for item in data %}
-    <form class=class-link" hx-get="/class/{{ item[0]|urlencode }}" hx-trigger="click" hx-push-url="true" hx-target="#sub-3">
-        <button class="result-button" type="button">
+    <a class=class-link" hx-get="/class/{{ item[0]|urlencode }}" hx-trigger="click" hx-push-url="true" hx-target="#sub-3">
             <div class="result">
                 <div class="result-block-1">
                     <div class="result-subblock" id="block">{{item[0]}}</div>
@@ -25,8 +24,8 @@
                     {% endif %}
                 </div>
             </div>
-        </button>
-    </form>
+        </a>
     {% endfor %}
+
 
 

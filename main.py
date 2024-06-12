@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect
 import dbSearch
 import enrollment
 import time
@@ -52,13 +52,16 @@ def search():
             session['query'] = query
 
     filters = session['filters']
-    rows = dbSearch.search_db(query, filters['creds'], filters['requirements'], filters['breadths'], filters['genEds'], filters['class_level'])
+    rows = dbSearch.search_db(query, filters.get('creds', []), filters.get('requirements', []),
+                              filters.get('breadths', []), filters.get('genEds', []),
+                              filters.get('class_level', []))
     if rows is None:
         return render_template('results.html', data=[], length=0)  # if no results, return empty list
 
     global results
     results = {tuple_item[1]: tuple_item[0] for tuple_item in rows}
 
+    print("Done searching.")
     return render_template('results.html', data=rows, length=len(rows))
 
 @app.route('/class/<path:class_code>')
@@ -92,7 +95,7 @@ def show_info(class_code):
 
 @app.route('/filter_credits', methods=['GET'])
 def filter_credits():
-    filters = session['filters']
+    filters = session.get('filters', {})
     filters['creds'] = request.args.getlist('values')
     session['filters'] = filters
     print(filters['creds'])
@@ -100,7 +103,7 @@ def filter_credits():
 
 @app.route('/filter_requirements', methods=['GET'])
 def filter_requirements():
-    filters = session['filters']
+    filters = session.get('filters', {})
     filters['requirements'] = request.args.getlist('values')
     session['filters'] = filters
     print(filters['requirements'])
@@ -108,7 +111,7 @@ def filter_requirements():
 
 @app.route('/filter_department', methods=['GET'])
 def filter_departments():
-    filters = session['filters']
+    filters = session.get('filters', {})
     filters['departments'] = request.args.getlist('values')
     session['filters'] = filters
     print(filters['departments'])
@@ -116,7 +119,7 @@ def filter_departments():
 
 @app.route('/filter_classlevel', methods=['GET'])
 def filter_class_level():
-    filters = session['filters']
+    filters = session.get('filters', {})
     filters['class_level'] = request.args.getlist('values')
     session['filters'] = filters
     print(filters['class_level'])
@@ -126,7 +129,7 @@ def filter_class_level():
 
 @app.route('/filter_breadths', methods=['GET'])
 def filter_breadths():
-    filters = session['filters']
+    filters = session.get('filters', {})
     filters['breadths'] = request.args.getlist('values')
     session['filters'] = filters
     print(filters['breadths'])

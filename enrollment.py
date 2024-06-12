@@ -187,7 +187,11 @@ def extract_class_info(json_data):
         for section in sections:
             typ = section.get("type", "N/A")
             secNum = section.get("sectionNumber", "N/A")
-            meeting_info = section.get("classMeetings", [{}])[0] or {}
+            meeting_info_list = section.get("classMeetings", [{}])
+            if meeting_info_list:  # Check if the list is not empty
+                meeting_info = meeting_info_list[0]  # Access the first element
+            else:
+                meeting_info = {}  # Assign an empty dictionary as default value
             enrollment_status = section.get("enrollmentStatus", {})
 
             instructor = "TBA"
@@ -287,6 +291,8 @@ def ms_to_time(milliseconds):
 def ms_to_time(ms):
   if ms is None:
     return None
+  if ms == "N/A":
+    return "N/A"
   sixpm = datetime.strptime("18:00", "%H:%M")
   tm = sixpm + timedelta(milliseconds=ms)
   return tm.strftime("%I:%M %p")

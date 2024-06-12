@@ -143,6 +143,8 @@
 <div class="enrollmentData"></div>
 </div>
 
+<div id="mobile-signal" data-mobile="{{ 'true' if is_mobile else 'false' }}" style="display: none;"></div>
+
 
 <script>
     function showChart() {
@@ -221,5 +223,34 @@
     });
     feather.replace({ class: 'foo bar', 'stroke-width': 3, 'height': 15 });
 </script>
+
+<script>
+
+function updateSubDisplay() {
+    // Check if the device is a mobile device
+    const isMobile = window.innerWidth < 1200;
+
+    if (isMobile) {
+        const sub3 = document.querySelector('.sub-3');
+        const hasContent = sub3.innerHTML.trim().length > 0;
+
+        if (hasContent) {
+            document.querySelector('.sub-1').style.display = 'none';
+            document.querySelector('.sub-2').style.display = 'none';
+            sub3.style.display = 'block';
+        } else {
+            document.querySelector('.sub-1').style.display = 'block';
+            document.querySelector('.sub-2').style.display = 'block';
+            sub3.style.display = 'none';
+        }
+    }
+}
+
+// Call the function initially
+updateSubDisplay();
+
+// Call the function initially
+updateSubDisplay();
+    </script>
 {% endif %}
 {% endblock %}
