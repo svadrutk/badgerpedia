@@ -230,7 +230,18 @@ def extract_class_info(json_data):
                     aggregateCurrentlyEnrolled if aggregateCurrentlyEnrolled is not None else 0
                 )
 
-            capacity = enrollment_status.get("capacity", enrollment_status.get("aggregateCapacity", 1))
+            capacity = enrollment_status.get("capacity")
+            aggregateCapacity = enrollment_status.get("aggregateCapacity")
+
+            if capacity is None and aggregateCapacity is None:
+                capacity = "N/A"
+            else:
+                capacity = max(
+                    capacity if capacity is not None else 1,
+                    aggregateCapacity if aggregateCapacity is not None else 1
+                )
+
+
             waitlistCurrentSize = enrollment_status.get("waitlistCurrentSize", 0)
 
             currentlyEnrolled = currentlyEnrolled if currentlyEnrolled is not None else 0

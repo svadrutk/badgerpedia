@@ -80,6 +80,9 @@ def show_info(class_code):
     else:
         term = "Summer " + str(time.localtime().tm_year)
 
+    prereqs = f[0][3]
+
+
     # get the times for the class
     timesDict = enrollment.extract_class_info(enrollment.get_enrollment(enrollment.get_class_codes(decoded_class_code)))
 
