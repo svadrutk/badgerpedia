@@ -4,11 +4,9 @@
 <!-- The grade is color-coded based on the grade received. -->
 
 <!-- results.html -->
-<!DOCTYPE html>
-<html lang="en">
     <div class="length">{{length|safe}} Results</div>
     {% for item in data %}
-    <form class=class-link" hx-get="/class/{{ item[0]|urlencode }}" hx-trigger="click" hx-push-url="true">
+    <form class=class-link" hx-get="/class/{{ item[0]|urlencode }}" hx-trigger="click" hx-push-url="true" hx-target="#sub-3">
         <button class="result-button" type="button">
             <div class="result">
                 <div class="result-block-1">
@@ -30,6 +28,5 @@
         </button>
     </form>
     {% endfor %}
-</html>
 
 

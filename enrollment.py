@@ -163,62 +163,76 @@ def custom_sort(item):
     return (lec_num, type_order, section_num)
 
 def extract_class_info(json_data):
+    if len(json_data) == 0:
+        empty = [{
+            "type": "N/A",
+            "sectionNumber": "N/A",
+            "lecNum": "N/A",
+            "instructor": "N/A",
+            "meetingDays": "N/A",
+            "meetingTimes": ["N/A", "N/A"],
+            "location": ["N/A", "N/A"],
+            "currentlyEnrolled": 0,
+            "capacity": 1,
+            "waitlistCurrentSize": 0
+        }]
+        return empty
 
-    if(len(json_data) == 0):
-      empty = [{"type": "N/A", "sectionNumber": "N/A", "lecNum": "N/A", "instructor": "N/A", "meetingDays": "N/A", "meetingTimes": ["N/A", "N/A"], "location": ["N/A", "N/A"], "currentlyEnrolled": "0", "capacity": "1", "waitlistCurrentSize": "0"}]
-      return empty
     class_info_list = []
 
     for class_data in json_data:
         sections = class_data.get("sections", [])
-        try:
-          lecNum = class_data['autoEnrollClasses'][0]
-        except:
-          lecNum = class_data['id']
+        lecNum = class_data.get('autoEnrollClasses', [class_data['id']])[0]
+
         for section in sections:
             typ = section.get("type", "N/A")
             secNum = section.get("sectionNumber", "N/A")
-            try:
-              meeting_info = section.get("classMeetings")[0]
-            except:
-              meeting_info = {}
+            meeting_info = section.get("classMeetings", [{}])[0] or {}
             enrollment_status = section.get("enrollmentStatus", {})
-            try:
-              instructor = section['instructor']['name']['first'] + " " + section['instructor']['name']['last']
-            except:
-              instructor = "TBA"
-            try:
-              startTime = ms_to_time(meeting_info.get("meetingTimeStart"))
-              endTime = ms_to_time(meeting_info.get("meetingTimeEnd"))
-            except:
-              startTime = "N/A"
-              endTime = "N/A"
-            try:
-              meetingDaysList = meeting_info.get("meetingDaysList")
-              if len(meetingDaysList) == 0:
-                meetingDaysList = section['classMeetings'][1]['meetingDays']
-                if(len(meetingDaysList) == 0):
-                  meetingDaysList = section['classMeetings'][0]['meetingDays']
-            except:
-              meetingDaysList = "N/A"
-            try:
-              building = meeting_info.get("building", {}).get("buildingName")
-              room = meeting_info.get("room")
-            except:
-              building = "N/A"
-              room = "N/A"
-            try:
-              currentlyEnrolled = enrollment_status.get("currentlyEnrolled")
-            except:
-              currentlyEnrolled = 0
-            try:
-              capacity = enrollment_status.get("capacity")
-            except:
-              capacity = 1
-            try:
-              waitlistCurrentSize = enrollment_status.get("waitlistCurrentSize")
-            except:
-              waitlistCurrentSize = 0
+
+            instructor = "TBA"
+            if section.get('instructor') and section['instructor'].get('name'):
+                instructor = f"{section['instructor']['name'].get('first', 'TBA')} {section['instructor']['name'].get('last', 'TBA')}"
+
+            startTime = ms_to_time(meeting_info.get("meetingTimeStart", "N/A"))
+            endTime = ms_to_time(meeting_info.get("meetingTimeEnd", "N/A"))
+
+            meetingDaysList = meeting_info.get("meetingDaysList", [])
+            if not meetingDaysList:
+                meetingDaysList = [section.get("classMeetings", [{}])[i].get("meetingDays", []) for i in range(len(section.get("classMeetings", [])))]
+                meetingDaysList = [day for sublist in meetingDaysList if sublist for day in sublist]  # Flatten list and handle None values
+
+            building = "N/A"
+            room = "N/A"
+            if meeting_info == None:
+                building = "N/A"
+                room = "N/A"
+            else:
+                building = meeting_info.get("building", {})
+                if building != None:
+                  building = building.get("buildingName", "N/A")
+                else:
+                  building = "N/A"
+                room = meeting_info.get("room", "N/A")
+
+            currentlyEnrolled = enrollment_status.get("currentlyEnrolled")
+            aggregateCurrentlyEnrolled = enrollment_status.get("aggregateCurrentlyEnrolled")
+
+            if currentlyEnrolled is None and aggregateCurrentlyEnrolled is None:
+                currentlyEnrolled = "N/A"
+            else:
+                currentlyEnrolled = max(
+                    currentlyEnrolled if currentlyEnrolled is not None else 0,
+                    aggregateCurrentlyEnrolled if aggregateCurrentlyEnrolled is not None else 0
+                )
+
+            capacity = enrollment_status.get("capacity", enrollment_status.get("aggregateCapacity", 1))
+            waitlistCurrentSize = enrollment_status.get("waitlistCurrentSize", 0)
+
+            currentlyEnrolled = currentlyEnrolled if currentlyEnrolled is not None else 0
+            capacity = capacity if capacity is not None else 1
+            waitlistCurrentSize = waitlistCurrentSize if waitlistCurrentSize is not None else 0
+
             class_info = {
                 "type": typ,
                 "sectionNumber": secNum,
@@ -233,39 +247,42 @@ def extract_class_info(json_data):
             }
             class_info_list.append(class_info)
 
-    # filter to only include classes with type LEC
-    # remove duplicate classes
-
     for d in class_info_list:
         dayList = []
         days = d['meetingDays']
         for day in days:
-          if day == 'MONDAY' or day =='M':
-            dayList.append('M')
-          elif day == 'TUESDAY' or day == 'T':
-            dayList.append('T')
-          elif day == 'WEDNESDAY' or day == 'W':
-            dayList.append('W')
-          elif day == 'THURSDAY' or day == 'R':
-            dayList.append('R')
-          elif day == 'FRIDAY' or day == 'F':
-            dayList.append('F')
+            if day in ['MONDAY', 'M']:
+                dayList.append('M')
+            elif day in ['TUESDAY', 'T']:
+                dayList.append('T')
+            elif day in ['WEDNESDAY', 'W']:
+                dayList.append('W')
+            elif day in ['THURSDAY', 'R']:
+                dayList.append('R')
+            elif day in ['FRIDAY', 'F']:
+                dayList.append('F')
         d['meetingDays'] = ''.join(dayList)
 
-        # Sort the data by 'lecNum'
     sorted_data = sorted(class_info_list, key=custom_sort)
-
     seen = set()
     unique_sorted_data = []
 
     for d in sorted_data:
-      d_tuple = (d['type'], d['sectionNumber'])
-      if d_tuple not in seen:
-        unique_sorted_data.append(d)
-        seen.add(d_tuple)
-    for d in unique_sorted_data:
-      print("TYPE: " + d['type'] + " SECTION NUMBER: " + d['sectionNumber'] + " LEC NUM: " + d['lecNum'])
+        d_tuple = (d['type'], d['sectionNumber'])
+        if d_tuple not in seen:
+            unique_sorted_data.append(d)
+            seen.add(d_tuple)
+
     return unique_sorted_data
+
+def ms_to_time(milliseconds):
+    if milliseconds == "N/A":
+        return "N/A"
+    seconds = milliseconds // 1000
+    minutes = (seconds // 60) % 60
+    hours = (seconds // 3600) % 24
+    return f"{hours:02}:{minutes:02}"
+
 
 def ms_to_time(ms):
   if ms is None:

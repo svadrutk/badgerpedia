@@ -35,7 +35,7 @@ def index(data = None, capacity = None, term = None, times = None):
 
     if data is not None and capacity is not None and term is not None and times is not None:
         print("Data: ", data)
-        return render_template('base.html', data=data, capacity=capacity, term=term, times=times)
+        return render_template('class_info.html', length = 0, data=data, capacity=capacity, term=term, times=times)
     else:
         print("wtf")
         return render_template('base.html', length=0)
@@ -80,9 +80,11 @@ def show_info(class_code):
     # get the times for the class
     timesDict = enrollment.extract_class_info(enrollment.get_enrollment(enrollment.get_class_codes(decoded_class_code)))
 
+    if 'HX-Request' in request.headers:
+        return render_template('class_info_raw.html', data=f, capacity=capacity, term=term, times=timesDict)
+    else:
+        return render_template('class_info.html', data=f, capacity=capacity, term=term, times=timesDict)
 
-    index(data = f, capacity = capacity, term = term, times = timesDict)
-    return ('', 204)
 
 ############################################################################################
 # Filter functions
