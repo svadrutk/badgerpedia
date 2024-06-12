@@ -88,7 +88,7 @@
     </div>
     <div class="classDescription">{{ data[0][2] }}</div>
     <div class="classDescription"><b>Prerequisites</b></div>
-    <div class="classDescription">{{ data[0][3] }}</div>
+    <div class="classDescription">{{ data[0][3] | safe }}</div>
 
     <div class="gradeChart">
         <canvas id="gradeChart" style="display: none;"></canvas>
