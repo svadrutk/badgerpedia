@@ -116,11 +116,11 @@
     </div>
 
 <script>
-feather.replace();
+feather.replace({width: '1rem', height: '1rem'});
 
 // HTMX content swap event handler
 document.body.addEventListener('htmx:afterSwap', function(evt) {
-    feather.replace(); // Reinitialize Feather icons
+    feather.replace({width: '1rem', height: '1rem'}); // Reinitialize Feather icons
     console.log('HTMX content swapped');
     initializeClassLinkListeners(); // Reinitialize event listeners
 });
