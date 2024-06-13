@@ -140,7 +140,6 @@ initializeClassLinkListeners();
 
 function toggleOptions(id) {
     document.querySelector(`#${id} .options`).classList.toggle('active');
-    window.history.replaceState({}, '', `/search`);
 }
 
 function toggleSelection(optionElement, id, value) {

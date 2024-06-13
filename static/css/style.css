@@ -330,7 +330,8 @@ p {
 }
 
 .multi-select .options {
-  position: absolute;
+  position: relative;
+  margin-top: 10px;
   top: 100%;
   left: 0;
   width: 100%;
